@@ -56,10 +56,10 @@ public class PlayerManager {
     public PlayerManager(String p1, Deck d1, Boolean tutorial, String p2, Deck d2, int l2, String p3, Deck d3, int l3,
             String p4,
             Deck d4, int l4, int t1, int t2, int t3, int t4) {
-        player[t1] = new Human(p1, d1, tutorial);
-        player[t2] = new Cpu(p2, d2, l2);
-        player[t3] = new Cpu(p3, d3, l3);
-        player[t4] = new Cpu(p4, d4, l4);
+        players[t1] = new Human(p1, d1, tutorial);
+        players[t2] = new Cpu(p2, d2, l2);
+        players[t3] = new Cpu(p3, d3, l3);
+        players[t4] = new Cpu(p4, d4, l4);
 
         // insertion sort for sorting players alphabetically
         defaultList = players;
@@ -76,10 +76,40 @@ public class PlayerManager {
         }
     }
 
+    /**
+     * This method sort the list and move the next player to the first index, if
+     * this is true, it will call its self one more time to skip the next player
+     * 
+     * @param skipped a boolean indicating if the next player is skipped
+     */
     public void sortNextPlayer(boolean skipped) {
-        if (skipped) {
-
+        Player temp = players[0];
+        if (!skipped) {
+            players[0] = players[1];
+            players[1] = players[2];
+            players[2] = players[3];
+            players[3] = temp;
+        } else {
+            sortNextPlayer(false);
         }
+    }
+
+    /**
+     * *the method will just switch the second and fourth player, thus reverting the
+     * rotation. Again, current player is player[0], but instead of next being i.e.
+     * normally player[1] Bob, it will be Joe in replacement of Bob in position
+     * player[1], and Bob is moved to player[3], being the fourth player.
+     * 
+     */
+    public void sortReverse() {
+        Player temp = players[1];
+        players[1] = players[3];
+        players[3] = temp;
+        sortNextPlayer(false);
+    }
+
+    public void drawCardforNext(int){
+        
     }
 
 }
