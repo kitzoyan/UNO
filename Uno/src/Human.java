@@ -1,12 +1,3 @@
-public class Human extends Player {
-    private boolean tutorialMode = false;
+public class Human {
 
-    public Human(String name) {
-        super(name);
-    }
-
-    public Human(String name, Deck deck, boolean tutorialMode) {
-        super(deck, name);
-        this.tutorialMode = tutorialMode;
-    }
 }
