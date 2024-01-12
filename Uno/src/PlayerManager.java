@@ -1,3 +1,4 @@
+
 public class PlayerManager {
     private final int SET_PLAYERS = 4;
     private int nextDraw;
@@ -110,6 +111,32 @@ public class PlayerManager {
 
     public void drawCardforNext(int){
         
+    }
+
+    /**
+     * This program returns the current player in the list
+     * 
+     * @return a Player object representing the current player
+     */
+    public Player getCurrentPlayer() {
+        return players[0];
+    }
+
+    public Player searchPlayer(String name) {
+        int bottom = 0, top = SET_PLAYERS, index = -1, middle;
+        boolean found = false;
+        while (players[bottom].getName().compareTo(players[top].getName()) <= 0 && !found) {
+            middle = (bottom + top) / 2;
+            if (name.equals(players[middle].getName())) {
+                found = true;
+                index = middle;
+            } else if (name.compareTo(players[middle].getName()) > 0) {
+                bottom = middle + 1;
+            } else {
+                top = middle - 1;
+            }
+        }
+        return players[index];
     }
 
 }
