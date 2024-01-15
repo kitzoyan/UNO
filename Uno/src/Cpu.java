@@ -34,8 +34,19 @@ public class Cpu extends Player {
      * 2: will play the color that has the most card
      */
     public Card play(Card currentCard) {
+
+        if (deck.getNumCards() > 1) {
+            calledUno = false;
+            needUno = false;
+        }
         for (int i = 0; i < deck.getNumCards(); i++) {
             if (deck[i].isValidMove(currentCard)) {
+                System.out.println("============================================" + name + "'s turn");
+                System.out.println(name + " played " + deck[i]);
+                System.out.println(deck.getNumCards() + "cards in hand.");
+                if (deck.getNumCards() == 1) {
+                    calledUno();
+                }
                 return deck[i];
             }
         }
