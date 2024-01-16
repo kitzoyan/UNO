@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         Card c = new Reverse("red");
         // System.out.println(String.valueOf(c.getClass()));
-        Deck d = new Deck("cards.txt");
+        // Deck d = new Deck("cards.txt");
         // Deck g = new Deck();
         // System.out.println(d);
         // g.moveCard(d, c);
@@ -14,7 +14,10 @@ public class Main {
         // System.out.println(d.drawRandom());
         // d.superSort();
         // System.out.println(d);
+<<<<<<< HEAD
         System.out.println(d.getCard(d.searchSpecificCard("green", "9")));
+=======
+>>>>>>> parent of b923b48 (Recommit For Previous)
         // System.out.println(d.searchColourCards("yellow"));
         // System.out.println(d.searchColourTypeCards("red", "Skip"));
     }

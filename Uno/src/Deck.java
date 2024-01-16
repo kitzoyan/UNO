@@ -41,9 +41,22 @@ public class Deck {
         this.cards = other.cards;
     }
 
-    public Deck(Card[] list) {
+    /**
+     * Generates a a new deck given the file to read from and range to read. This
+     * should be called upon loading old decks. When the file reads the deck, it
+     * will
+     * find a matching Card from the already made fullDeck and copy it to this deck.
+     * 
+     * @param fileSlot the file to read from containg game information
+     * @param start    the starting range of the fdeck
+     * @param end      the ending of the deck (if the deck ends at index 3, pass in
+     *                 4)
+     * @param fullDeck the fullDeck from Uno
+     * 
+     * @deprecated until I recieve the true txt file format
+     */
+    public Deck(String fileSlot, int start, int end, Deck fullDeck) {
         cards = new Card[MAX_CARDS];
-        numCards = list.length;
     }
 
     /**
@@ -146,6 +159,7 @@ public class Deck {
      *         found.
      */
     public int searchSpecificCard(String colour, String type) {
+        type = "class Cards." + type;
         Card temporary = makeNewCard(colour, type);
         return searchSpecificCard(temporary);
     }
