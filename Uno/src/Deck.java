@@ -146,7 +146,6 @@ public class Deck {
      *         found.
      */
     public int searchSpecificCard(String colour, String type) {
-        type = "class Cards." + type;
         Card temporary = makeNewCard(colour, type);
         return searchSpecificCard(temporary);
     }
