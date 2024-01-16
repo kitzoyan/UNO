@@ -51,7 +51,7 @@ public class Number extends Card {
             return false;
         }
         if (colour.equals(other.colour)) {
-            if (other instanceof ColourChange) {
+            if (other instanceof Number) {
                 if (((Number) other).number == number) {
                     return true;
                 }

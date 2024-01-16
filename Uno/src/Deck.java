@@ -129,7 +129,7 @@ public class Deck {
      */
     private int searchSpecificCard(Card c) {
         for (int i = 0; i < numCards; i++) {
-            if (cards[i].equals(c)) {
+            if (c.equals(cards[i])) {
                 return i;
             }
         }
