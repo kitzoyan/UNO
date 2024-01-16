@@ -28,7 +28,7 @@ public class PlayerManager {
         for (int i = 0; i < SET_PLAYERS; i++) {
             j = i - 1;
             temp = defaultList[i];
-            while (j >= 0 && temp.getName().compareTo(defaultList[j]) < 0) {
+            while (j >= 0 && temp.getName().compareTo(defaultList[j].getName()) < 0) {
                 defaultList[j + 1] = defaultList[j];
                 j--;
             }
@@ -69,7 +69,7 @@ public class PlayerManager {
         for (int i = 0; i < SET_PLAYERS; i++) {
             j = i - 1;
             temp = defaultList[i];
-            while (j >= 0 && temp.getName().compareTo(defaultList[j]) < 0) {
+            while (j >= 0 && temp.getName().compareTo(defaultList[j].getName()) < 0) {
                 defaultList[j + 1] = defaultList[j];
                 j--;
             }

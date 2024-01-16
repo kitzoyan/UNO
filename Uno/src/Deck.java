@@ -80,7 +80,7 @@ public class Deck {
     }
 
     /**
-     * Transfer a card from the implicit deck to the explicit deck
+     * Transfer a card from the explicit deck to the implicit deck
      * 
      * @param donor    the deck giving the card
      * @param fromThis the card coming from the other deck
@@ -317,4 +317,20 @@ public class Deck {
         return sum;
     }
 
+    public int getNumCards() {
+        return numCards;
+    }
+
+    /**
+     * Gets the card at the specified index
+     * 
+     * @param i the specified index
+     * @return the Card in that index
+     */
+    public Card getCard(int i) {
+        if (i > numCards - 1 || i < 0) {
+            return null;
+        }
+        return cards[i];
+    }
 }

@@ -26,5 +26,9 @@ public abstract class Player {
         this.deck = deck;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public abstract Card play(Card currentCard);
 }

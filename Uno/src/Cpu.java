@@ -29,28 +29,30 @@ public class Cpu extends Player {
 
     /**
      * This method will decide which card the CPU will play according to the
-     * difficulty
-     * 1: will play the first card that is valid
-     * 2: will play the color that has the most card
+     * difficulty, assume Game wil call uno for the cpu
+     * 
+     * @return the Card that is valid to play, this method assumes game will be one
+     *         transferring the card from deck to deck
      */
     public Card play(Card currentCard) {
 
-        if (deck.getNumCards() > 1) {
-            calledUno = false;
-            needUno = false;
-        }
         for (int i = 0; i < deck.getNumCards(); i++) {
-            if (deck[i].isValidMove(currentCard)) {
-                System.out.println("============================================" + name + "'s turn");
-                System.out.println(name + " played " + deck[i]);
-                System.out.println(deck.getNumCards() + "cards in hand.");
-                if (deck.getNumCards() == 1) {
-                    calledUno();
-                }
-                return deck[i];
+            if (deck.getCard(i).isValidMove(currentCard)) {
+                // System.out.println("============================================" + name +
+                // "'s turn");
+                // System.out.println(name + " played " + deck.getCard(i));
+                // System.out.println(deck.getNumCards() + "cards in hand.");
+                callUno();
+                return deck.getCard(i);
             }
         }
-        // draw card if it reaches
+        Card drawnCard = drawRandom;
+        if (drawnCard.isValidMove(currentCard)) {
+            return drawnCard;
+        }
+
+        deck.addCard(drawnCard);
+        return null;
     }
 
     /**
@@ -66,84 +68,84 @@ public class Cpu extends Player {
 
             if (difficultly == 1) {
                 for (int i = 0; i < deck.getNumCards(); i++) {
-                    if (deck[i].isValidMove(currentCard)) {
-                        return deck[i];
+                    if (deck.getCard(i).isValidMove(currentCard)) {
+                        return deck.getCard(i);
                     }
                 }
 
             } else if (difficultly == 2) {
-                int yellow = deck.searcColourCards("yellow");
+                int yellow = deck.searchColourCards("yellow");
                 int blue = deck.searchColourCards("blue");
                 int red = deck.searchColourCards("red");
                 int green = deck.searchColourCards("green");
 
                 if (red > blue && red > green && red > yellow) {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard) && deck[i].getColor().equals("red")) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("red")) {
+                            return deck.getCard(i);
                         }
                     }
                 } else if (green > red && green > blue && green > yellow) {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard) && deck[i].getColor().equals("green")) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("green")) {
+                            return deck.getCard(i);
                         }
                     }
                 } else if (blue > red && blue > green && blue > yellow) {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard) && deck[i].getColor().equals("blue")) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("blue")) {
+                            return deck.getCard(i);
                         }
                     }
                 } else if (yellow > blue && yellow > green && yellow > red) {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard) && deck[i].getColor().equals("yellow")) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("yellow")) {
+                            return deck.getCard(i);
                         }
                     }
                 }
 
                 // this will run when there is no valid move for the best color
                 for (int i = 0; i < deck.getNumCards(); i++) {
-                    if (deck[i].isValidMove(currentCard)) {
-                        return deck[i];
+                    if (deck.getCard(i).isValidMove(currentCard)) {
+                        return deck.getCard(i);
                     }
                 }
 
             } else if (difficultly == 3) {
-                int yellow = deck.searcColourCards("yellow");
+                int yellow = deck.searchColourCards("yellow");
                 int blue = deck.searchColourCards("blue");
                 int red = deck.searchColourCards("red");
                 int green = deck.searchColourCards("green");
 
                 if (red > blue && red > green && red > yellow) {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard) && deck[i].getColor().equals("red")) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("red")) {
+                            return deck.getCard(i);
                         }
                     }
                 } else if (green > red && green > blue && green > yellow) {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard) && deck[i].getColor().equals("green")) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("green")) {
+                            return deck.getCard(i);
                         }
                     }
                 } else if (blue > red && blue > green && blue > yellow) {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard) && deck[i].getColor().equals("blue")) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("blue")) {
+                            return deck.getCard(i);
                         }
                     }
                 } else if (yellow > blue && yellow > green && yellow > red) {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard) && deck[i].getColor().equals("yellow")) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("yellow")) {
+                            return deck.getCard(i);
                         }
                     }
                 } else {
                     for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck[i].isValidMove(currentCard)) {
-                            return deck[i];
+                        if (deck.getCard(i).isValidMove(currentCard)) {
+                            return deck.getCard(i);
                         }
                     }
                 }
@@ -152,10 +154,19 @@ public class Cpu extends Player {
         // draw card if it reaches
     }
 
+    /**
+     * Has a 50% chance to call UNO
+     */
     public void callUno() {
-        Random rand = new Random();
-        if (rand.nextInt(1) == 0) {
-            this.calledUno = true;
+        if (deck.getNumCards() > 1) {
+            calledUno = false;
+            needUno = false;
+        } else {
+            Random rand = new Random();
+            if (rand.nextInt(1) == 0) {
+                System.out.println(name + "called Uno");
+                this.calledUno = true;
+            }
         }
     }
 
