@@ -6,10 +6,23 @@ import Cards.Card;
 public class Human extends Player {
     private boolean tutorialMode = false;
 
+    /**
+     * Makes a new Human with a name. Deck size is set default to 0.
+     * 
+     * @param name
+     */
     public Human(String name) {
         super(name);
     }
 
+    /**
+     * Makes a new Human player with a preset deck. This should be used upon loading
+     * a game.
+     * 
+     * @param name
+     * @param deck         the deck
+     * @param tutorialMode
+     */
     public Human(String name, Deck deck, boolean tutorialMode) {
         super(deck, name);
         this.tutorialMode = tutorialMode;

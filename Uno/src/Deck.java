@@ -21,28 +21,7 @@ public class Deck {
                 Card c = null;
                 String colour = reader.readLine();
                 String type = reader.readLine();
-                if (colour.equals("black")) {
-                    if (type.equals("C")) {
-                        c = new ColourChange();
-                    } else if (type.equals("F")) {
-                        c = new PlusFour();
-                    }
-                } else {
-                    try {
-                        int num = Integer.parseInt(type);
-                        c = new Number(colour, num);
-                    } catch (NumberFormatException e) {
-                        if (type.equals("T")) {
-                            c = new PlusTwo(colour);
-                        } else if (type.equals("R")) {
-                            c = new Reverse(colour);
-                        } else if (type.equals("S")) {
-                            c = new Skip(colour);
-                        }
-                    }
-
-                }
-
+                c = makeNewCard(colour, type);
                 cards[i] = c;
             }
         } catch (IOException e) {
@@ -62,6 +41,11 @@ public class Deck {
         this.cards = other.cards;
     }
 
+    public Deck(Card[] list) {
+        cards = new Card[MAX_CARDS];
+        numCards = list.length;
+    }
+
     /**
      * Create an empty deck
      */
@@ -77,6 +61,43 @@ public class Deck {
             s += cards[i] + "\n";
         }
         return s;
+    }
+
+    /**
+     * Makes a new card object with the given items
+     * 
+     * @param colour
+     * @param type   a single capital letter String or class name represeting the
+     *               type.
+     *               (T = PlusTwo, F = PlusFour, C = ColourChange, R = Reverse, S =
+     *               Skip, a whole number = Number)
+     *               To create a Number card, input the digit instead of "N."
+     * @return a card of identical attributes
+     */
+    private Card makeNewCard(String colour, String type) {
+        Card c = null;
+        if (colour.equals("black")) {
+            if (type.equals("C") || type.equals("ColourChange")) {
+                c = new ColourChange();
+            } else if (type.equals("F") || type.equals("PlusFour")) {
+                c = new PlusFour();
+            }
+        } else {
+            try {
+                int num = Integer.parseInt(type);
+                c = new Number(colour, num);
+            } catch (NumberFormatException e) {
+                if (type.equals("T") || type.equals("PlusTwo")) {
+                    c = new PlusTwo(colour);
+                } else if (type.equals("R") || type.equals("Reverse")) {
+                    c = new Reverse(colour);
+                } else if (type.equals("S") || type.equals("Skip")) {
+                    c = new Skip(colour);
+                }
+            }
+
+        }
+        return c;
     }
 
     /**
@@ -113,6 +134,21 @@ public class Deck {
             }
         }
         return -1;
+    }
+
+    /**
+     * Searches and returns the index of the first card that match the given colour
+     * and type.
+     * 
+     * @param colour a String colour with first character lowercase
+     * @param type   a String of the actual class name. If an whole number, searches
+     * @return the index of the specific. Return -1 if no cards are
+     *         found.
+     */
+    public int searchSpecificCard(String colour, String type) {
+        type = "class Cards." + type;
+        Card temporary = makeNewCard(colour, type);
+        return searchSpecificCard(temporary);
     }
 
     /**
@@ -278,26 +314,6 @@ public class Deck {
      */
     public boolean isEmpty() {
         return (numCards == 0);
-    }
-
-    /**
-     * Searches and returns the total sum of cards that match the given colour and
-     * type
-     * 
-     * @param colour a String colour with first character lowercase
-     * @param type   a String of the actual class name
-     * @return the integer count of total cards matching. Return 0 if no cards are
-     *         found.
-     */
-    public int searchColourTypeCards(String colour, String type) {
-        int sum = 0;
-        type = "class Cards." + type;
-        for (int i = 0; i < numCards; i++) {
-            if (cards[i].getColour().equals(colour) && String.valueOf(cards[i].getClass()).equals(type)) {
-                sum++;
-            }
-        }
-        return sum;
     }
 
     /**
