@@ -78,9 +78,8 @@ public class Human extends Player {
                     chosen = selectCards(sc, currentCard, currentColour, drawDeck);
                     exit = true;
                 } else if (input == 3) { // Save Game
-                    // maybe make a way to access the exit variable inside game so it will break off
-                    // the loop
-
+                    Uno.saveGame();
+                    Uno.getCurrentGame().toggleGameSaved();
                     exit = true;
                     // Call game from static uno
                 } else if (input == 4 && tutorialMode) { // Reveal cards

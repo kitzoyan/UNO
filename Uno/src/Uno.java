@@ -114,8 +114,10 @@ public class Uno {
 
         if (tutorial) {
             currentGame = new Tutorial(gameName, player, cpu1, cpu2, cpu3, fullDeck);
+            currentGame.run();
         } else {
             currentGame = new Game(gameName, player, cpu1, cpu2, cpu3, fullDeck);
+            currentGame.run();
         }
     }
 
@@ -188,7 +190,7 @@ public class Uno {
         }
     }
 
-    public static boolean saveGame() {
+    public static void saveGame() {
         // generate the current date
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -204,11 +206,16 @@ public class Uno {
             BufferedWriter writer = new BufferedWriter(new FileWriter(emptySlot()));
             writer.write(currentDateTime + "\n");
             writer.write(currentGame.getName() + "\n\n");
+            if (currentGame instanceof Tutorial) {
+                writer.write("tutorial\n");
+            } else {
+                writer.write("normal\n");
+            }
 
             writer.write(currentGame.getCurrentCard().toString() + "\n");
             writer.write(currentGame.getCurrentColour() + "\n");
 
-            writer.write("discard\n");
+            writer.write("\ndiscard\n");
             writer.write(discardPile.getNumCards() + "\n");
             writer.write(discardPile.toString() + "\n");
 
@@ -228,12 +235,11 @@ public class Uno {
                 writer.write(i);
                 writer.write("\n" + temp.getDeck().toString() + "\n\n");
             }
-
+            writer.close();
+            System.out.println("Game Saved");
         } catch (IOException ioe) {
             System.out.println("SYSTEM: (UNO) There are an error saving the game");
         }
-
-        return true;
     }
 
     /**

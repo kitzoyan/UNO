@@ -22,11 +22,13 @@ public class Game {
     protected String name;
     protected Card currentCard = null;
     protected String currentColour;
-    protected final static int INIT_CARDS = 1;
+    protected final static int INIT_CARDS = 7;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
     private Scanner sc = new Scanner(System.in);
+
+    private boolean gameSaved = false;
 
     /**
      * Creates a new Game object with the following parameters
@@ -63,7 +65,7 @@ public class Game {
         drawFirstCard();
         System.out.println("The first card: " + currentCard);
         System.out.println("Current colour: " + currentColour);
-        run();
+        // run();
     }
 
     public Game(String gameFile) {
@@ -75,16 +77,19 @@ public class Game {
      * Run the game loop. Prints all welcoming messages.
      */
     public void run() {
+        gameSaved = false;
         boolean exit = false;
         while (!exit) {
             exit = turn();
         }
-        System.out.println("============================================ END");
-        System.out.println(players.getCurrentPlayer().getName() + " was the winner. Thanks for playing!");
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            System.out.println("SYSTEM: (Game) Thread was interputed");
+        if (!gameSaved) {
+            System.out.println("============================================ END");
+            System.out.println(players.getCurrentPlayer().getName() + " was the winner. Thanks for playing!");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                System.out.println("SYSTEM: (Game) Thread was interputed");
+            }
         }
         return;
     }
@@ -123,6 +128,9 @@ public class Game {
                                 + players.getCurrentPlayer().getName().toUpperCase()
                                 + "'s TURN");
         Card chosen = players.getCurrentPlayer().play(currentCard, currentColour, drawPile);
+        if (gameSaved) {
+            return true; // exit the loop if the game is saved
+        }
         setCurrentCard(chosen, players.getCurrentPlayer() instanceof Cpu, players.getCurrentPlayer().deck);
         if (chosen == null) {
             System.out.println("Current card: " + currentCard);
@@ -132,9 +140,6 @@ public class Game {
         System.out.println("Current colour: " + currentColour);
         System.out.println("\nCard(s) left: " + players.getCurrentPlayer().deck.getNumCards());
 
-        // System.out.println("==================================================
-        // Discard Pile");
-        // System.out.println(discardPile);
         return (players.getCurrentPlayer().deck.isEmpty());
 
     }
@@ -255,6 +260,10 @@ public class Game {
 
     public String gameType() {
         return "normal";
+    }
+
+    public void toggleGameSaved() {
+        gameSaved = !gameSaved;
     }
 
 }
