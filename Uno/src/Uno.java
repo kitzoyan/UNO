@@ -202,9 +202,33 @@ public class Uno {
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(emptySlot()));
-            writer.write(currentDateTime);
-            writer.write(currentGame.getName());
-            writer.write(currentGame.gameType());
+            writer.write(currentDateTime + "\n");
+            writer.write(currentGame.getName() + "\n\n");
+
+            writer.write(currentGame.getCurrentCard().toString() + "\n");
+            writer.write(currentGame.getCurrentColour() + "\n");
+
+            writer.write("discard\n");
+            writer.write(discardPile.getNumCards() + "\n");
+            writer.write(discardPile.toString() + "\n");
+
+            writer.write("draw\n");
+            writer.write(drawPile.getNumCards() + "\n");
+            writer.write(drawPile.toString() + "\n\n");
+
+            Player temp;
+            for (int i = 0; i < 4; i++) {
+                temp = players.getPlayer(i);
+                writer.write(temp.getName());
+                if (temp instanceof Human) {
+                    writer.write("human\n");
+                } else {
+                    writer.write("cpu\n");
+                }
+                writer.write(i);
+                writer.write("\n" + temp.getDeck().toString() + "\n\n");
+            }
+
         } catch (IOException ioe) {
             System.out.println("SYSTEM: (UNO) There are an error saving the game");
         }

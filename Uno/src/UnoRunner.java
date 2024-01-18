@@ -9,16 +9,13 @@
 |  This class will run the Uno game by calling Uno.run() inside its main      |
 |  method.                                                                    |
 |=============================================================================*/
-import java.text.SimpleDateFormat;
 import java.util.*;
 import Cards.*;
-import Cards.Number;
 
 public class UnoRunner {
     public final static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // simulation();
         Uno.run();
     }
 
