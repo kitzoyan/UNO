@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*=============================================================================
 |  PlayerManager.java                                                         |
 |-----------------------------------------------------------------------------|
@@ -9,6 +10,9 @@
 |  the rotation/order of players. The order of players can change depending on|
 |  any effects executed from the current card from Game class.                |
 |=============================================================================*/
+=======
+import java.io.ObjectInputStream.GetField;
+>>>>>>> Game---Robin
 
 public class PlayerManager {
     private final int SET_PLAYERS = 4;
@@ -96,14 +100,14 @@ public class PlayerManager {
      */
     public void sortNextPlayer(boolean skipped) {
         Player temp = players[0];
-        if (!skipped) {
-            players[0] = players[1];
-            players[1] = players[2];
-            players[2] = players[3];
-            players[3] = temp;
-        } else {
+        players[0] = players[1];
+        players[1] = players[2];
+        players[2] = players[3];
+        players[3] = temp;
+        if (skipped) {
             sortNextPlayer(false);
         }
+
     }
 
     /**
@@ -113,15 +117,24 @@ public class PlayerManager {
      * player[1], and Bob is moved to player[3], being the fourth player.
      * 
      */
-    public void sortReverse() {
+    public void reverseOrder() {
         Player temp = players[1];
         players[1] = players[3];
         players[3] = temp;
-        sortNextPlayer(false);
+        System.out.println("The order was reversed");
     }
 
-    public void drawCardforNext(int){
-        
+    /**
+     * Draws cards for the next player affected by such
+     * 
+     * @param cardsForNext the amount of cards the next player must draw
+     * @param drawDeck     the public draw Deck
+     */
+    public void drawCardforNext(int cardsForNext, Deck drawDeck) {
+        for (int i = 0; i < cardsForNext; i++) {
+            players[1].deck.moveCard(drawDeck, drawDeck.drawRandom());
+        }
+        System.out.println(players[1].getName() + " drew " + cardsForNext);
     }
 
     /**
@@ -130,6 +143,20 @@ public class PlayerManager {
      * @return a Player object representing the current player
      */
     public Player getCurrentPlayer() {
+        return players[0];
+    }
+
+    /**
+     * Index must not be larger than the number of players or less than 0.
+     * Out of bounds values will be changed to 0. This method should only be used to
+     * set up the game.
+     * 
+     * @param position the position of the player of interest
+     * @return the player of the specified index
+     */
+    public Player getPlayer(int position) {
+        if (position < SET_PLAYERS || position > -1)
+            return players[position];
         return players[0];
     }
 
@@ -148,6 +175,10 @@ public class PlayerManager {
             }
         }
         return null;
+    }
+
+    public int getSetPlayers() {
+        return SET_PLAYERS;
     }
 
 }

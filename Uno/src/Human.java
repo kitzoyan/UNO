@@ -95,7 +95,7 @@ public class Human extends Player {
         if (chosen == null) {
             // System.out.println("You drew a card.");
         } else {
-            System.out.println("You played: " + chosen);
+            // System.out.println("You played: " + chosen);
         }
 
         return chosen;

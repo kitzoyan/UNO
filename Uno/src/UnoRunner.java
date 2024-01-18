@@ -17,8 +17,13 @@ public class UnoRunner {
     public final static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+<<<<<<< HEAD
         Uno.run();
         simulation();
+=======
+        // simulation();
+        Uno.run();
+>>>>>>> Game---Robin
     }
 
     public static void simulation() {
@@ -77,4 +82,8 @@ public class UnoRunner {
         }
         System.out.println(discardDeck);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> Game---Robin
 }

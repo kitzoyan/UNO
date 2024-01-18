@@ -42,9 +42,13 @@ public abstract class Player {
         return name;
     }
 
+<<<<<<< HEAD
     public Deck getDeck() {
         return deck;
     }
 
     public abstract Card play(Card currentCard, String currentColour, Deck fullDeck);
+=======
+    public abstract Card play(Card currentCard, String currentColour, Deck drawDeck);
+>>>>>>> Game---Robin
 }
