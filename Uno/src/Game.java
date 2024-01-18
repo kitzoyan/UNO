@@ -98,6 +98,12 @@ public class Game {
      * @return
      */
     private boolean turn() {
+        // If all cards used
+        if (drawPile.isEmpty()) {
+            System.out.println("Draw pile is empty. Substituting discard pile as draw pile");
+            drawPile = discardPile;
+            discardPile = new Deck();
+        }
         boolean toSkip = applyCurrentCard();
         if (toSkip) {
             System.out.println(players.getPlayer(1).getName() + " was skipped");
@@ -125,6 +131,10 @@ public class Game {
         }
         System.out.println("Current colour: " + currentColour);
         System.out.println("\nCard(s) left: " + players.getCurrentPlayer().deck.getNumCards());
+
+        // System.out.println("==================================================
+        // Discard Pile");
+        // System.out.println(discardPile);
         return (players.getCurrentPlayer().deck.isEmpty());
 
     }
@@ -136,9 +146,9 @@ public class Game {
      */
     private boolean applyCurrentCard() {
         if (currentCard instanceof PlusFour) {
-            players.drawCardforNext(((PlusFour) currentCard).getDraw(), discardPile);
+            players.drawCardforNext(((PlusFour) currentCard).getDraw(), drawPile);
         } else if (currentCard instanceof PlusTwo) {
-            players.drawCardforNext(((PlusTwo) currentCard).getDraw(), discardPile);
+            players.drawCardforNext(((PlusTwo) currentCard).getDraw(), drawPile);
         } else if (currentCard instanceof Reverse) {
             players.reverseOrder();
         }
@@ -174,8 +184,10 @@ public class Game {
             currentCard = c;
             currentColour = currentCard.getColour();
             discardPile.moveCard(donor, currentCard);
+            // System.out.println(currentCard + " got moved to discard pile");
 
             if (currentColour.equals("black")) {
+                // System.out.println("\nDISCARD PILE" + discardPile + "\n");
                 boolean exit = false;
                 int input = 0;
 

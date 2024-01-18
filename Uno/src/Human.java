@@ -136,6 +136,7 @@ public class Human extends Player {
 
                         // If you choose to use this card, and it's valid, play it. Otherwise, try again
                         if (chosen.isValidMove(currentCard) || chosen.getColour().equals(currentColour)) {
+                            System.out.println();
                             return chosen;
                         } else {
                             System.out.println("You cannot play this card. Try choosing another");
@@ -217,6 +218,7 @@ public class Human extends Player {
                     System.out.print("[input]: ");
                     input = Integer.parseInt(sc.nextLine());
                     if (input == 1) {
+                        System.out.println();
                         return newDrawn;
                     } else if (input == 2) {
                         exit = true;
@@ -228,7 +230,7 @@ public class Human extends Player {
                 }
             }
         } else {
-            System.out.println("This card cannot be played and has been stored in your deck");
+            System.out.println("This card cannot be played and has been stored in your deck\n");
         }
         return null;
     }

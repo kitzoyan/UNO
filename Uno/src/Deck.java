@@ -154,6 +154,8 @@ public class Deck {
      */
     public boolean moveCard(Deck donor, Card fromThis) {
         if (numCards == MAX_CARDS || donor.isEmpty()) {
+            // String system = (numCards == MAX_CARDS ? "1" : " 2");
+            // System.out.println("SYSTEM: (Deck) unsuccessful transfer1 " + system);
             return false;
         }
         int index = donor.searchSpecificCard(fromThis);
@@ -163,6 +165,8 @@ public class Deck {
         Card removed = donor.removeCard(index);
         boolean successful = addCard(removed);
         if (!successful) {
+            // System.out.println("SYSTEM: (Deck) unsuccessful transfer2");
+            removeCard(searchSpecificCard(removed));
             donor.addCard(removed);
         }
         superSort();
