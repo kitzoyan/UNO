@@ -88,11 +88,12 @@ public class Uno {
         cpu3 = verifyInput();
 
         if (tutorial) {
-            currentGame = new Tutorial(gameName, player, cpu1, cpu2, cpu3);
+            currentGame = new Tutorial(gameName, player, cpu1, cpu2, cpu3, fullDeck);
         } else {
-            currentGame = new Game(gameName, player, cpu1, cpu2, cpu3);
+            currentGame = new Game(gameName, player, cpu1, cpu2, cpu3, fullDeck);
         }
         currentGame.run(); // run the game
+        return;
     }
 
     /**

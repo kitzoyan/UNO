@@ -48,7 +48,8 @@ public class Cpu extends Player {
      */
     private Card playWithNoDifficulty(Card currentCard, String currentColour, Deck drawDeck) {
         for (int i = 0; i < deck.getNumCards(); i++) {
-            System.out.println("CPU is thinking of plaing... " + currentColour + " " + deck.getCard(i).getColour());
+            // System.out.println("CPU is thinking of plaing... " + currentColour + " " +
+            // deck.getCard(i).getColour());
             if (deck.getCard(i).isValidMove(currentCard) || deck.getCard(i).getColour().equals(currentColour)) {
                 callUno();
                 return deck.getCard(i);
@@ -56,7 +57,7 @@ public class Cpu extends Player {
         }
         Card newDrawn = drawDeck.drawRandom();
         deck.moveCard(drawDeck, newDrawn);
-        System.out.println("Cpu drew a card. " + currentColour + " " + newDrawn.getColour());
+        System.out.println(name + " drew a card");
         if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
             return newDrawn;
         }
