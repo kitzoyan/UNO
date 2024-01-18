@@ -30,5 +30,5 @@ public abstract class Player {
         return name;
     }
 
-    public abstract Card play(Card currentCard);
+    public abstract Card play(Card currentCard, Deck fullDeck);
 }

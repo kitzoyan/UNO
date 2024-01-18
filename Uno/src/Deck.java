@@ -30,6 +30,14 @@ public class Deck {
     }
 
     /**
+     * Create an empty deck
+     */
+    public Deck() {
+        numCards = 0;
+        cards = new Card[MAX_CARDS];
+    }
+
+    /**
      * Create a new deck by replicating an identical list of the original. All cards
      * still point to the same objects.
      * 
@@ -48,24 +56,33 @@ public class Deck {
      * find a matching Card from the already made fullDeck and copy it to this deck.
      * 
      * @param fileSlot the file to read from containg game information
-     * @param start    the starting range of the fdeck
-     * @param end      the ending of the deck (if the deck ends at index 3, pass in
+     * @param start    the starting line of the deck
+     * @param end      the line after the last line of the deck (if the deck ends at
+     *                 index 3, pass in
      *                 4)
      * @param fullDeck the fullDeck from Uno
      * 
-     * @deprecated until I recieve the true txt file format
+     * @deprecated this method may not actually be used. Game class may be the one
+     *             making and assigning decks.
      */
     public Deck(String fileSlot, int start, int end, Deck fullDeck) {
         cards = new Card[MAX_CARDS];
-    }
-
-    /**
-     * Create an empty deck
-     */
-    public Deck() {
-        numCards = 0;
-        cards = new Card[MAX_CARDS];
-
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileSlot));
+            for (int i = 0; i < start; i++) {
+                reader.readLine();
+            }
+            numCards = Integer.parseInt(reader.readLine());
+            for (int i = 0; i < numCards; i++) {
+                Card c = null;
+                String colour = reader.readLine();
+                String type = reader.readLine();
+                c = makeNewCard(colour, type);
+                cards[i] = c;
+            }
+        } catch (IOException e) {
+            System.out.println("SYSTEM: (Deck) There was an error reading from the file: " + fileSlot);
+        }
     }
 
     public String toString() {
@@ -122,6 +139,7 @@ public class Deck {
      *         the reciever deck is max sized, or donor deck has size of 0
      */
     public boolean moveCard(Deck donor, Card fromThis) {
+        superSort();
         if (numCards == MAX_CARDS || donor.isEmpty()) {
             return false;
         }
@@ -231,6 +249,9 @@ public class Deck {
      * Number cards
      */
     public void superSort() {
+        if (isEmpty()) {
+            return;
+        }
         sortByType();
         sortByAscendingNumber();
         sortByColour();
