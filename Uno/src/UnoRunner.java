@@ -11,13 +11,11 @@
 |=============================================================================*/
 import java.util.*;
 import Cards.*;
-import Cards.Number;
 
 public class UnoRunner {
     public final static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // simulation();
         Uno.run();
     }
 

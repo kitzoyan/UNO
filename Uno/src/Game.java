@@ -22,7 +22,7 @@ public class Game {
     protected String name;
     protected Card currentCard = null;
     protected String currentColour;
-    protected final static int INIT_CARDS = 7;
+    protected final static int INIT_CARDS = 1;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
@@ -228,4 +228,33 @@ public class Game {
         }
 
     }
+
+    public PlayerManager getPlayers() {
+        return players;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCurrentColour() {
+        return currentColour;
+    }
+
+    public Card getCurrentCard() {
+        return currentCard;
+    }
+
+    public Deck getDrawPile() {
+        return drawPile;
+    }
+
+    public Deck getDiscardPile() {
+        return discardPile;
+    }
+
+    public String gameType() {
+        return "normal";
+    }
+
 }

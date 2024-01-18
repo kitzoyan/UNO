@@ -1,3 +1,4 @@
+
 /*=============================================================================
 |  Uno.java                                                                   |
 |-----------------------------------------------------------------------------|
@@ -20,8 +21,9 @@
 |  game will return back to Uno.java, and Uno will be the one saving the game |
 |  information.                                                               |
 |=============================================================================*/
-
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -62,7 +64,7 @@ public class Uno {
                     "\t1. Create a new Game\n" + "\t2. Continue a game\n" + "\t3. Delete a game\n" + "\t4. Close Game");
             input = verifyInput(4); // make sure the input is within 4
             if (input == 1) { // create a game
-                if (emptySlot() != -1) {
+                if (emptySlot() != null) {
                     createGame(); // will create the game and run it
                 } else {
                     System.out.println("Delete a game before creating");
@@ -115,8 +117,6 @@ public class Uno {
         } else {
             currentGame = new Game(gameName, player, cpu1, cpu2, cpu3, fullDeck);
         }
-        currentGame.run(); // run the game
-        return;
     }
 
     /**
@@ -188,9 +188,53 @@ public class Uno {
         }
     }
 
-    // public static boolean saveGame() {
+    public static boolean saveGame() {
+        // generate the current date
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        String currentDateTime = dateFormat.format(currentDate);
 
-    // }
+        String currentColor = currentGame.getCurrentColour();
+        Card currentCard = currentGame.getCurrentCard();
+        PlayerManager players = currentGame.getPlayers();
+        Deck drawPile = currentGame.getDrawPile();
+        Deck discardPile = currentGame.getDiscardPile();
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(emptySlot()));
+            writer.write(currentDateTime + "\n");
+            writer.write(currentGame.getName() + "\n\n");
+
+            writer.write(currentGame.getCurrentCard().toString() + "\n");
+            writer.write(currentGame.getCurrentColour() + "\n");
+
+            writer.write("discard\n");
+            writer.write(discardPile.getNumCards() + "\n");
+            writer.write(discardPile.toString() + "\n");
+
+            writer.write("draw\n");
+            writer.write(drawPile.getNumCards() + "\n");
+            writer.write(drawPile.toString() + "\n\n");
+
+            Player temp;
+            for (int i = 0; i < 4; i++) {
+                temp = players.getPlayer(i);
+                writer.write(temp.getName());
+                if (temp instanceof Human) {
+                    writer.write("human\n");
+                } else {
+                    writer.write("cpu\n");
+                }
+                writer.write(i);
+                writer.write("\n" + temp.getDeck().toString() + "\n\n");
+            }
+
+        } catch (IOException ioe) {
+            System.out.println("SYSTEM: (UNO) There are an error saving the game");
+        }
+
+        return true;
+    }
 
     /**
      * Returns current game object
@@ -378,20 +422,20 @@ public class Uno {
 
     /**
      * Checks if the first empty game slot, this is use when creating game and
-     * saving game. Return -1 if there are no available game slots
+     * saving game. Return null if there are no available game slots
      * 
-     * @return return the index of the slot which is empty
+     * @return return the fileName of the slot which is empty
      */
-    private static int emptySlot() {
+    private static String emptySlot() {
         String empty = "| empty";
         if (empty.equals(checkGame(SLOT1FILE))) {
-            return 1;
+            return SLOT1FILE;
         } else if (empty.equals(checkGame(SLOT2FILE))) {
-            return 2;
+            return SLOT2FILE;
         } else if (empty.equals(checkGame(SLOT2FILE))) {
-            return 3;
+            return SLOT3FILE;
         }
-        return -1;
+        return null;
     }
 
     /**
