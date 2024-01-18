@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /*=============================================================================
 |  PlayerManager.java                                                         |
 |-----------------------------------------------------------------------------|
@@ -10,9 +10,7 @@
 |  the rotation/order of players. The order of players can change depending on|
 |  any effects executed from the current card from Game class.                |
 |=============================================================================*/
-=======
 import java.io.ObjectInputStream.GetField;
->>>>>>> Game---Robin
 
 public class PlayerManager {
     private final int SET_PLAYERS = 4;

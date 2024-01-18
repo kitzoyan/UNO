@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /*=============================================================================
 |  Game.java                                                                  |
 |-----------------------------------------------------------------------------|
@@ -14,17 +14,15 @@
 |  through PlayerManager). This class can also be extended into different     |
 |  game mode, like tutorial mode.                                             |
 |=============================================================================*/
-=======
 import Cards.*;
 import Cards.Number;
 import java.util.*;
 
->>>>>>> Game---Robin
 public class Game {
     protected String name;
     protected Card currentCard = null;
     protected String currentColour;
-    protected final static int INIT_CARDS = 1;
+    protected final static int INIT_CARDS = 7;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
