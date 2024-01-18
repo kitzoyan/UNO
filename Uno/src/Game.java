@@ -118,7 +118,11 @@ public class Game {
                                 + "'s TURN");
         Card chosen = players.getCurrentPlayer().play(currentCard, currentColour, drawPile);
         setCurrentCard(chosen, players.getCurrentPlayer() instanceof Cpu, players.getCurrentPlayer().deck);
-        System.out.println(players.getCurrentPlayer().getName() + " played: " + currentCard);
+        if (chosen == null) {
+            System.out.println("Current card: " + currentCard);
+        } else {
+            System.out.println(players.getCurrentPlayer().getName() + " played: " + currentCard);
+        }
         System.out.println("Current colour: " + currentColour);
         System.out.println("\nCard(s) left: " + players.getCurrentPlayer().deck.getNumCards());
         return (players.getCurrentPlayer().deck.isEmpty());
