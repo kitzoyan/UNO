@@ -6,6 +6,7 @@ import Cards.*;
 import Cards.Number;
 
 public class UnoRunner {
+<<<<<<< HEAD
     public final static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -70,4 +71,9 @@ public class UnoRunner {
         System.out.println(discardDeck);
     }
 
+=======
+    public static void main(String[] args) {
+        Uno.run();
+    }
+>>>>>>> Runner-Update
 }
