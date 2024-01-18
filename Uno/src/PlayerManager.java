@@ -175,6 +175,20 @@ public class PlayerManager {
         return null;
     }
 
+    /**
+     * Returns the Human player inside the list
+     * 
+     * @return a Player object
+     */
+    public Player searchHuman() {
+        for (int i = 0; i < SET_PLAYERS; i++) {
+            if (players[i] instanceof Human) {
+                return players[i];
+            }
+        }
+        return null;
+    }
+
     public int getSetPlayers() {
         return SET_PLAYERS;
     }

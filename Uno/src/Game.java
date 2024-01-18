@@ -216,4 +216,33 @@ public class Game {
         }
 
     }
+
+    public PlayerManager getPlayers() {
+        return players;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCurrentColour() {
+        return currentColour;
+    }
+
+    public Card getCurrentCard() {
+        return currentCard;
+    }
+
+    public Deck getDrawPile() {
+        return drawPile;
+    }
+
+    public Deck getDiscardPile() {
+        return discardPile;
+    }
+
+    public String gameType() {
+        return "normal";
+    }
+
 }
