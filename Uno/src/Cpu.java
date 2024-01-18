@@ -34,24 +34,32 @@ public class Cpu extends Player {
      * @return the Card that is valid to play, this method assumes game will be one
      *         transferring the card from deck to deck
      */
-    public Card play(Card currentCard) {
+    public Card play(Card currentCard, String currentColour, Deck drawDeck) {
+        return playWithNoDifficulty(currentCard, currentColour, drawDeck);
+    }
 
+    /**
+     * Plays a the first instance of a valid card found in its deck. If no valid
+     * cards, draw a card
+     * 
+     * @param currentCard
+     * @param drawDeck
+     * @return a card. Return null if no card was played.
+     */
+    private Card playWithNoDifficulty(Card currentCard, String currentColour, Deck drawDeck) {
         for (int i = 0; i < deck.getNumCards(); i++) {
-            if (deck.getCard(i).isValidMove(currentCard)) {
-                // System.out.println("============================================" + name +
-                // "'s turn");
-                // System.out.println(name + " played " + deck.getCard(i));
-                // System.out.println(deck.getNumCards() + "cards in hand.");
+            System.out.println("CPU is thinking of plaing... " + currentColour + " " + deck.getCard(i).getColour());
+            if (deck.getCard(i).isValidMove(currentCard) || deck.getCard(i).getColour().equals(currentColour)) {
                 callUno();
                 return deck.getCard(i);
             }
         }
-        Card drawnCard = drawRandom;
-        if (drawnCard.isValidMove(currentCard)) {
-            return drawnCard;
+        Card newDrawn = drawDeck.drawRandom();
+        deck.moveCard(drawDeck, newDrawn);
+        System.out.println("Cpu drew a card. " + currentColour + " " + newDrawn.getColour());
+        if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
+            return newDrawn;
         }
-
-        deck.addCard(drawnCard);
         return null;
     }
 
@@ -63,7 +71,7 @@ public class Cpu extends Player {
      * @return
      * @deprecated
      */
-    public Card playWithDifficulty(Card currentCard) {
+    private Card playWithDifficulty(Card currentCard) {
         if (difficultly > 4)
 
             if (difficultly == 1) {
@@ -152,6 +160,7 @@ public class Cpu extends Player {
             }
 
         // draw card if it reaches
+        return null;
     }
 
     /**
@@ -161,13 +170,24 @@ public class Cpu extends Player {
         if (deck.getNumCards() > 1) {
             calledUno = false;
             needUno = false;
-        } else {
+            return;
+        } else if (deck.getNumCards() == 1) {
             Random rand = new Random();
             if (rand.nextInt(1) == 0) {
                 System.out.println(name + "called Uno");
                 this.calledUno = true;
             }
+        } else {
+            System.out.println("SYSTEM: (Cpu) The game should have ended!");
         }
+    }
+
+    public boolean getCalledUno() {
+        return calledUno;
+    }
+
+    public boolean getNeedUno() {
+        return needUno;
     }
 
 }

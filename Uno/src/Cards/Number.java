@@ -35,6 +35,7 @@ public class Number extends Card {
         if (other.colour.equals(colour)) {
             return true;
         } else if (other instanceof Number) {
+            // System.out.println("IsValid in Number");
             if (((Number) other).number == number) {
                 return true;
             }

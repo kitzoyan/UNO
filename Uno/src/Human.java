@@ -42,9 +42,11 @@ public class Human extends Player {
      * @param drawDeck    the public draw Deck
      * @return a card the user chose. Returns null if no card was played.
      */
-    public Card play(Card currentCard, Deck drawDeck) {
+    public Card play(Card currentCard, String currentColour, Deck drawDeck) {
         Scanner sc = new Scanner(System.in);
         int input = 0;
+        deck.superSort();
+        // System.out.println(deck.getNumCards());
 
         // Print your choices
         String reveal = (tutorialMode ? "\t4. Reveal Cards\n" : "");
@@ -55,17 +57,18 @@ public class Human extends Player {
         // Run the user choice option loop
         while (!exit) {
             try {
-                input = Integer.parseInt(sc.nextLine());
+                System.out.print("[input]: ");
+                input = Integer.parseInt(sc.nextLine()); // Call Uno
                 if (input == 1) {
                     exit = true;
                     // Call game from static uno
-                } else if (input == 2) {
-                    chosen = selectCards(sc, drawDeck, currentCard);
+                } else if (input == 2) { // Play Cards
+                    chosen = selectCards(sc, currentCard, currentColour, drawDeck);
                     exit = true;
-                } else if (input == 3) {
+                } else if (input == 3) { // Save Game
                     exit = true;
                     // Call game from static uno
-                } else if (input == 4 && tutorialMode) {
+                } else if (input == 4 && tutorialMode) { // Reveal cards
                     exit = true;
                     // Call game from static uno
                 } else {
@@ -78,11 +81,11 @@ public class Human extends Player {
         }
 
         if (chosen == null) {
-            System.out.println("You drew a card.");
+            // System.out.println("You drew a card.");
         } else {
             System.out.println("You played: " + chosen);
         }
-        System.out.println("Card(s) left: " + deck.getNumCards());
+
         return chosen;
 
     }
@@ -94,7 +97,7 @@ public class Human extends Player {
      * @param drawDeck the public draw Deck
      * @return a card chose. Return null if no card played: card was drawn.
      */
-    private Card selectCards(Scanner sc, Deck drawDeck, Card currentCard) {
+    private Card selectCards(Scanner sc, Card currentCard, String currentColour, Deck drawDeck) {
         int input = 0;
         System.out.println("\t1. Draw a Random Card");
         int numChoices = 2;
@@ -110,14 +113,17 @@ public class Human extends Player {
         boolean exit = false;
         while (!exit) {
             try {
+                System.out.print("[input]: ");
                 input = Integer.parseInt(sc.nextLine());
                 if (input > 1 && input < numChoices) {
                     Card chosen = deck.getCard(input - 2);
-
+                    // System.out.println(chosen.getColour().equals(currentColour));
+                    // System.out.println(chosen.getColour());
+                    // System.out.println(currentColour);
                     if (!printDefinition(sc, chosen)) {
 
                         // If you choose to use this card, and it's valid, play it. Otherwise, try again
-                        if (deck.getCard(input - 2).isValidMove(currentCard)) {
+                        if (chosen.isValidMove(currentCard) || chosen.getColour().equals(currentColour)) {
                             return chosen;
                         } else {
                             System.out.println("You cannot play this card. Try choosing another");
@@ -127,7 +133,7 @@ public class Human extends Player {
                         System.out.println("Enter another card to play");
                     }
                 } else if (input == 1) {
-                    return drawCardFromPile(sc, drawDeck, currentCard);
+                    return drawCardFromPile(sc, currentCard, currentColour, drawDeck);
                 } else {
                     throw new NumberFormatException("");
                 }
@@ -157,6 +163,7 @@ public class Human extends Player {
         // Run user loop
         while (!exit) {
             try {
+                System.out.print("[input]: ");
                 input = Integer.parseInt(sc.nextLine());
                 if (input == 1) {
                     System.out.println(toKnow.getDefinition());
@@ -175,7 +182,7 @@ public class Human extends Player {
     }
 
     /**
-     * Draws a random Card from the public draw pile at the user's request.
+     * Draws a random Card from the public draw pile upon the user's request.
      * 
      * @param sc
      * @param drawDeck
@@ -183,11 +190,11 @@ public class Human extends Player {
      * @return a Card only if it can be played. If the card cannot be played, null
      *         be returned
      */
-    private Card drawCardFromPile(Scanner sc, Deck drawDeck, Card currentCard) {
+    private Card drawCardFromPile(Scanner sc, Card currentCard, String currentColour, Deck drawDeck) {
         Card newDrawn = drawDeck.drawRandom();
         System.out.println("You drew: " + newDrawn);
         deck.moveCard(drawDeck, newDrawn);
-        if (newDrawn.isValidMove(currentCard)) {
+        if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
             System.out.println("This card is valid to play. Do you wish to play it?\n\t1. Yes\n\t2. No");
             boolean exit = false;
             int input = 0;
@@ -195,6 +202,7 @@ public class Human extends Player {
             // Run user loop
             while (!exit) {
                 try {
+                    System.out.print("[input]: ");
                     input = Integer.parseInt(sc.nextLine());
                     if (input == 1) {
                         return newDrawn;
@@ -213,7 +221,10 @@ public class Human extends Player {
         return null;
     }
 
-    private void adriansCode() {
+    /**
+     * @deprecated
+     */
+    private void adriansInitialVersion() {
         Card currentCard = null;
         Scanner sc = null;
         Deck drawDeck = null;

@@ -46,7 +46,9 @@ public class Deck {
     public Deck(Deck other) {
         cards = new Card[MAX_CARDS];
         this.numCards = other.numCards;
-        this.cards = other.cards;
+        for (int i = 0; i < numCards; i++) {
+            cards[i] = other.cards[i];
+        }
     }
 
     /**
@@ -139,7 +141,6 @@ public class Deck {
      *         the reciever deck is max sized, or donor deck has size of 0
      */
     public boolean moveCard(Deck donor, Card fromThis) {
-        superSort();
         if (numCards == MAX_CARDS || donor.isEmpty()) {
             return false;
         }
@@ -147,8 +148,14 @@ public class Deck {
         if (index == -1) {
             return false;
         }
-
-        return addCard(donor.removeCard(index));
+        Card removed = donor.removeCard(index);
+        boolean successful = addCard(removed);
+        if (!successful) {
+            donor.addCard(removed);
+        }
+        superSort();
+        donor.superSort();
+        return successful;
 
     }
 
@@ -238,9 +245,12 @@ public class Deck {
             return null;
         }
         int random = Math.round((float) Math.random() * numCards) - 1;
+        if (random < 0) {
+            random = 0;
+        }
         // System.out.println(random);
         Card c = cards[random];
-        removeCard(random);
+        // removeCard(random); // Should not be removing it
         return c;
     }
 
@@ -252,6 +262,7 @@ public class Deck {
         if (isEmpty()) {
             return;
         }
+        sortNull();
         sortByType();
         sortByAscendingNumber();
         sortByColour();
