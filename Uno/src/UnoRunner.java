@@ -1,7 +1,15 @@
+
+/*=============================================================================
+|  UnoRunner.java                                                             |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class will run the Uno game by calling Uno.run() inside its main      |
+|  method.                                                                    |
+|=============================================================================*/
 import java.util.*;
-
-import javax.sound.midi.Soundbank;
-
 import Cards.*;
 import Cards.Number;
 

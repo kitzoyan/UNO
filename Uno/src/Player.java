@@ -1,3 +1,15 @@
+
+/*=============================================================================
+|  Player.java                                                                |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class is the parent class of Cpu and Human class. This is an abstract |
+|  class that contains the abstract method for any type of player to play     |
+|  their card.                                                                |
+|=============================================================================*/
 import Cards.*;
 
 public abstract class Player {
@@ -28,6 +40,10 @@ public abstract class Player {
 
     public String getName() {
         return name;
+    }
+
+    public Deck getDeck() {
+        return deck;
     }
 
     public abstract Card play(Card currentCard, String currentColour, Deck fullDeck);

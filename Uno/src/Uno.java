@@ -1,3 +1,26 @@
+/*=============================================================================
+|  Uno.java                                                                   |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class acts like a game manager for any uno games being run (Uno       |
+|  itself, the pack of cards, cannot be instantiated) and it will keep track  |
+|  of MAXIMUM three game slots. When this class is run, it will first check if|
+|  the slots are empty or if there is data stored in it. It will initiate any |
+|  game objects respectively. Then the class will print a menu, allowing the  |
+|  user to either create a new game, load a game or delete a game, read rules,|
+|  and customer service information. When you create a new game, the class    |
+|  will prompt you for the game type you want to create (normal or tutorial). |
+|  You can also load a  game from the text file and resume from there.        |
+|  Note:                                                                      |
+|  making a new game does not automatically save it to a txt file, it exists  |
+|  within the computer’s system. The save must be manual. As well, saving a   |
+|  game will return back to Uno.java, and Uno will be the one saving the game |
+|  information.                                                               |
+|=============================================================================*/
+
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;

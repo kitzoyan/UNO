@@ -1,3 +1,15 @@
+
+/*=============================================================================
+|  Human.java                                                                 |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class is the child class of the Player class. This is a class contains|
+|  all the methods that require for a player, including the player interface. |
+|  This class has two modes, tutorial and normal.                             |
+|=============================================================================*/
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

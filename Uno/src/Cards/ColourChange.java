@@ -1,4 +1,15 @@
 package Cards;
+/*=============================================================================
+|  ColourChange.java                                                          |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This This class is the child card extends from the class Card. All the     |
+|  cards that is a Color change card falls into this category, having a       |
+|  default definition and isValidMove.                                        |
+|=============================================================================*/
 
 public class ColourChange extends Card {
     private static String definition;

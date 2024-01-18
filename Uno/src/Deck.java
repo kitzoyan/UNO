@@ -1,3 +1,15 @@
+
+/*=============================================================================
+|  Deck.java                                                                  |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class is the manager of the card objects. This class has a maximum of |
+|  108 elements in the array and it will be able to move a card to another    |
+|  deck, draw a random card from itself, sort the deck by color/type/size.    |
+|=============================================================================*/
 import java.io.*;
 import Cards.*;
 import Cards.Number;

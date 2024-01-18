@@ -1,4 +1,16 @@
 
+/*=============================================================================
+|  Cpu.java                                                                   |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class is the child class of the Player class. This class contains all |
+|  the logic for a Cpu to operate. With the difficulty level, we can select   |
+|  the amount of logic statements to turn on, increasing or decreasing the    |
+|  level of “intelligence”. The Cpu has a 50% chance to call Uno.             |
+|=============================================================================*/
 import java.util.Random;
 import Cards.*;
 

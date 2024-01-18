@@ -1,4 +1,15 @@
 package Cards;
+/*=============================================================================
+|  PlusFour.java                                                              |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class is the child card extends from the class Card. All the cards    |
+|  that is a Plus four card falls into this category, having a default        |
+|  definition and isValidMove.                                                |
+|=============================================================================*/
 
 public class PlusFour extends Card {
     private static String definition;

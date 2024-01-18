@@ -1,3 +1,14 @@
+/*=============================================================================
+|  PlayerManager.java                                                         |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class is the class that manages the player objects. This class acts as|
+|  the rotation/order of players. The order of players can change depending on|
+|  any effects executed from the current card from Game class.                |
+|=============================================================================*/
 
 public class PlayerManager {
     private final int SET_PLAYERS = 4;
@@ -129,14 +140,14 @@ public class PlayerManager {
             middle = (bottom + top) / 2;
             if (name.equals(players[middle].getName())) {
                 found = true;
-                index = middle;
+                return players[middle];
             } else if (name.compareTo(players[middle].getName()) > 0) {
                 bottom = middle + 1;
             } else {
                 top = middle - 1;
             }
         }
-        return players[index];
+        return null;
     }
 
 }

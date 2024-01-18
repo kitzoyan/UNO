@@ -1,4 +1,14 @@
 package Cards;
+/*=============================================================================
+|  PlusTwo.java                                                               |
+|-----------------------------------------------------------------------------|
+|  Programmer:  Adrian Lock and Robin Yan                                     |
+|  Last Modified:   Jan 18, 2024                                              |
+|  Course:  ICS4U1                                                            |
+|-----------------------------------------------------------------------------|
+|  This class extends from the class Card. All +2 cards fall into this        |
+|  category, having a default definition and isValidMove method.              |
+|=============================================================================*/
 
 public class PlusTwo extends Card {
     private static String definition;
