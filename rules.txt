@@ -1,24 +1,29 @@
-6
+4
 Everyone will start with 7 cards in their hands
 In every round, you can only play cards that are the same colour or the same number with the card on top of the discard pile. Otherwise, you will need to draw a card.
 The first person who has no cards wins the game.
 Remember to call out UNO! If you have the last card.
 
 N
-This is a number card, you can play this card when it matches the same colour as the last card played or they are the same number. WHen this card is played, nothing will happen.
+This is a number card, you can play this card when it matches the same colour as the last card played or they are the same number. 
+When this card is played, nothing will happen.
 
 F
-This is a wild plus four card, you can play this card anytime. When this card is played, the next player must draw four cards and their turn will be skipped. The current player can also choose the current colour of the game.
-
+This is a wild plus four card, you can play this card anytime. 
+When this card is played, the next player must draw four cards and their turn will be skipped. The current player can also choose the current colour of the game.
 
 T
-This is a plus two card, you can play this card when it matches the same colour and when the last card played is plus two. When this card is played, the next player must draw two cards and their turn will be skipped.
+This is a plus two card, you can play this card when it matches the same colour and when the last card played is plus two. 
+When this card is played, the next player must draw two cards and their turn will be skipped.
 
 R
-This is a reverse card, you can play this card when it matches the same colour and when the last card played is reverse. When this card is played, it will change the game from clockwise to counter-clockwise or vice versa.
+This is a reverse card, you can play this card when it matches the same colour and when the last card played is reverse. 
+When this card is played, it will change the game from clockwise to counter-clockwise or vice versa.
 
 S
-This is a skip card, you can play this card when it matches the same colour and when the last card played is also a skip. When this card is played, it will skip the next player’s turn.
+This is a skip card, you can play this card when it matches the same colour and when the last card played is also a skip. 
+When this card is played, it will skip the next player’s turn.
 
 C
-This is a colour change card, you can play this card anytime. When this card is played, the current player can change the current colour of the game.
+This is a colour change card, you can play this card anytime. 
+When this card is played, the current player can change the current colour of the game.
