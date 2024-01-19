@@ -59,11 +59,11 @@ public class Cpu extends Player {
      * @return a card. Return null if no card was played.
      */
     private Card playWithNoDifficulty(Card currentCard, String currentColour, Deck drawDeck) {
-        for (int i = 0; i < deck.getNumCards(); i++) {
+        for (int i = deck.getNumCards() - 1; i > -1; i--) { //
             // System.out.println("CPU is thinking of plaing... " + currentColour + " " +
             // deck.getCard(i).getColour());
             if (deck.getCard(i).isValidMove(currentCard) || deck.getCard(i).getColour().equals(currentColour)) {
-                callUno();
+                // callUno();
                 return deck.getCard(i);
             }
         }
@@ -71,7 +71,7 @@ public class Cpu extends Player {
         deck.moveCard(drawDeck, newDrawn);
         System.out.println(name + " drew a card");
         if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
-            callUno();
+            // callUno();
             return newDrawn;
         }
         return null;
@@ -181,12 +181,11 @@ public class Cpu extends Player {
      * Has a 50% chance to call UNO
      */
     public void callUno() {
-        // Because the CPU calls uno before their card is removed, so numCards is 2
-        if (deck.getNumCards() > 2) {
+        if (deck.getNumCards() > 1) {
             calledUno = false;
             needUno = false;
             return;
-        } else if (deck.getNumCards() == 2) {
+        } else if (deck.getNumCards() == 1) {
             needUno = true;
             int rand = Math.round((float) Math.random());
             if (rand == 1) {

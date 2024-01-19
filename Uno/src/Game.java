@@ -23,7 +23,7 @@ public class Game {
     protected Card currentCard = null;
     protected Card previousCard = null; // Used only to check if people drew instead of played
     protected String currentColour;
-    protected final static int INIT_CARDS = 7;
+    protected final static int INIT_CARDS = 2;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
@@ -110,8 +110,9 @@ public class Game {
             discardPile = new Deck();
         }
 
-        // Check if the previous card is the same identity by adress as the the current,
-        // such do NOT APPLY the card
+        // Check if the previous card is the same identity by address as the the
+        // current,
+        // if such, do NOT APPLY the card
         boolean toSkip = (currentCard == previousCard ? false : applyCurrentCard());
 
         if (toSkip) {
@@ -131,15 +132,19 @@ public class Game {
         if (gameSaved) {
             return true; // exit the loop if the game is saved
         }
+        previousCard = currentCard;
         setCurrentCard(chosen, players.getCurrentPlayer() instanceof Cpu, players.getCurrentPlayer().getDeck());
         if (chosen == null) {
             System.out.println("Current card: " + currentCard);
         } else {
             System.out.println(players.getCurrentPlayer().getName() + " played: " + currentCard);
+            if (players.getCurrentPlayer() instanceof Cpu) {
+                ((Cpu) players.getCurrentPlayer()).callUno();
+            }
         }
         System.out.println("Current colour: " + currentColour);
         System.out.println("\nCard(s) left: " + players.getCurrentPlayer().getDeck().getNumCards());
-        previousCard = currentCard;
+
         return (players.getCurrentPlayer().getDeck().isEmpty());
 
     }
