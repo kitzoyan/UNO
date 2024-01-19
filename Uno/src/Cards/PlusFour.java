@@ -54,4 +54,8 @@ public class PlusFour extends Card {
         }
         return (other instanceof PlusFour);
     }
+
+    public String getType() {
+        return "F";
+    }
 }

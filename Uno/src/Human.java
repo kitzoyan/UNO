@@ -35,9 +35,8 @@ public class Human extends Player {
      * @param d            the deck being passed in
      * @param tutorialMode
      */
-    public Human(String name, Deck d, boolean tutorialMode) {
+    public Human(String name, Deck d) {
         super(d, name);
-        this.tutorialMode = tutorialMode;
     }
 
     /**

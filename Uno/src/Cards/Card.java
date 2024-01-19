@@ -35,4 +35,6 @@ public abstract class Card {
     public String getColour() {
         return colour;
     }
+
+    public abstract String getType();
 }

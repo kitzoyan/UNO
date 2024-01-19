@@ -23,9 +23,8 @@ public class Cpu extends Player {
         super(name);
     }
 
-    public Cpu(String name, Deck deck, int difficultly) {
+    public Cpu(String name, Deck deck) {
         super(deck, name);
-        this.difficultly = difficultly;
     }
 
     public Cpu(String name, Deck deck, int difficultly, boolean calledUno, boolean needUno) {

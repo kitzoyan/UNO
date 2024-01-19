@@ -53,4 +53,8 @@ public class Skip extends Card {
         }
         return (other.colour.equals(colour) && other instanceof Skip);
     }
+
+    public String getType() {
+        return "S";
+    }
 }

@@ -22,6 +22,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import javax.crypto.spec.DESKeySpec;
+
 public class Game {
     protected String name;
     protected Card currentCard = null;
@@ -73,8 +75,11 @@ public class Game {
     }
 
     public Game(String gameFile, Deck fullDeck) {
-        String input;
-        String playerName, cpu1, cpu2, cpu3;
+        String input, color, type, player;
+        String[] names = new String[4];
+        Deck[] decks = new Deck[4];
+        int[] order = new int[4];
+        Player[] temp = new Player[4];
         drawPile = new Deck(fullDeck);
         discardPile = new Deck();
 
@@ -86,42 +91,45 @@ public class Game {
             while (!input.equals("")) { // skip the date and the game name
                 input = reader.readLine();
             }
-            reader.readLine(); // skip the game mode
+            reader.readLine(); // skip the game mode line
 
-            input = reader.readLine();
-            currentCard = makeNewCard(input);
+            color = reader.readLine();
+            type = reader.readLine();
+            currentCard = returnNewCard(color, type);
             currentColour = reader.readLine();
 
-            for (int i = 0; i < 2; i++) {
-                reader.readLine();
-                reader.readLine();
-                reader.readLine();
+            reader.readLine();
+            reader.readLine();
+            input = reader.readLine();
+            for (int i = 0; !input.equals(""); i++) {
+                color = input;
+                type = reader.readLine();
+                discardPile.moveCard(drawPile, returnNewCard(color, type));
+                input = reader.readLine();
             }
 
-            input = reader.readLine(); // the number of cards in discard pile
-
-            writer.write("\ndiscard\n");
-            writer.write(discardPile.getNumCards() + "\n");
-            writer.write(discardPile.toString() + "\n");
-
-            writer.write("draw\n");
-            writer.write(drawPile.getNumCards() + "\n");
-            writer.write(drawPile.toString() + "\n\n");
-
-            Player temp;
             for (int i = 0; i < 4; i++) {
-                temp = players.getPlayer(i);
-                writer.write(temp.getName());
-                if (temp instanceof Human) {
-                    writer.write("human\n");
-                } else {
-                    writer.write("cpu\n");
+                names[i] = reader.readLine();
+                player = reader.readLine();
+                order[i] = Integer.parseInt(reader.readLine());
+                input = reader.readLine();
+                decks[i] = new Deck();
+                while (!input.equals("")) {
+                    color = input;
+                    type = reader.readLine();
+                    decks[i].moveCard(drawPile, returnNewCard(color, type));
+                    input = reader.readLine();
                 }
-                writer.write(i);
-                writer.write("\n" + temp.getDeck().toString() + "\n\n");
+                if (player.equals("human")) {
+                    temp[i] = new Human(names[i], decks[i]);
+                } else {
+                    temp[i] = new Cpu(names[i], decks[i]);
+                }
             }
-            writer.close();
-            System.out.println("Game Saved");
+
+            players = new PlayerManager(temp[0], temp[1], temp[2], temp[3],
+                    order[3], order[0], order[1], order[2]);
+            reader.close();
         } catch (IOException ioe) {
             System.out.println("SYSTEM: (UNO) There are an error saving the game");
         }
@@ -352,37 +360,8 @@ public class Game {
     /**
      * Translate the text inside the text file into a card
      */
-    private Card makeNewCard(String input) {
-        Card c = null;
-        String type;
-        String number;
-
-        type = input.split(" ")[0];
-        number = (input.split(" ")[1]);
-
-        if (type.equals("wild")) {
-            if (type.equals("change colour")) {
-                c = new ColourChange();
-            } else if (type.equals("+4")) {
-                c = new PlusFour();
-            }
-        } else {
-            try {
-                int num = Integer.parseInt(number);
-                c = new Number(type, num);
-            } catch (NumberFormatException e) {
-                if (type.equals("+2")) {
-                    c = new PlusTwo(type);
-                } else if (type.equals("Reverse")) {
-                    c = new Reverse(type);
-                } else if (type.equals("Skip")) {
-                    c = new Skip(type);
-                }
-            }
-
-        }
-
-        return c;
+    private Card returnNewCard(String color, String type) {
+        return drawPile.getCard(drawPile.searchSpecificCard(color, type));
     }
 
 }

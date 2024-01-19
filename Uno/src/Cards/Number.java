@@ -74,4 +74,8 @@ public class Number extends Card {
     public int getNumber() {
         return number;
     }
+
+    public String getType() {
+        return "" + number;
+    }
 }

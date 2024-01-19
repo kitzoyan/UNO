@@ -53,4 +53,8 @@ public class Reverse extends Card {
         }
         return (other.colour.equals(colour) && other instanceof Reverse);
     }
+
+    public String getType() {
+        return "R";
+    }
 }

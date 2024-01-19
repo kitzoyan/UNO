@@ -212,28 +212,39 @@ public class Uno {
                 writer.write("normal\n");
             }
 
-            writer.write(currentGame.getCurrentCard().toString() + "\n");
-            writer.write(currentGame.getCurrentColour() + "\n");
+            currentCard = currentGame.getCurrentCard();
+            writer.write(currentCard.getColour() + "\n" + currentCard.getType() + "\n");
+            writer.write(currentColor + "\n");
 
             writer.write("\ndiscard\n");
-            writer.write(discardPile.getNumCards() + "\n");
-            writer.write(discardPile.toString() + "\n");
+            // writer.write(discardPile.getNumCards() + "\n");
+            for (int i = 0; i < discardPile.getNumCards(); i++) {
+                writer.write(discardPile.getCard(i).getColour() + "\n" + discardPile.getCard(i).getType() + "\n");
+            }
 
-            writer.write("draw\n");
-            writer.write(drawPile.getNumCards() + "\n");
-            writer.write(drawPile.toString() + "\n\n");
+            writer.write("\n");
+            // writer.write("draw\n");
+            // writer.write(drawPile.getNumCards() + "\n");
+            // writer.write(drawPile.toString() + "\n");
 
             Player temp;
+            Deck deck;
+
             for (int i = 0; i < 4; i++) {
                 temp = players.getPlayer(i);
+                deck = temp.getDeck();
+
                 writer.write(temp.getName());
                 if (temp instanceof Human) {
                     writer.write("\nhuman\n");
                 } else {
                     writer.write("\ncpu\n");
                 }
-                writer.write("" + i);
-                writer.write("\n" + temp.getDeck().toString() + "\n\n");
+                writer.write("" + i + "\n");
+                for (int j = 0; j < deck.getNumCards(); j++) {
+                    writer.write(deck.getCard(j).getColour() + "\n" + deck.getCard(j).getType() + "\n");
+                }
+                writer.write("\n");
             }
             writer.close();
             System.out.println("Game Saved");

@@ -53,4 +53,8 @@ public class PlusTwo extends Card {
         }
         return (other.colour.equals(colour) && other instanceof PlusTwo);
     }
+
+    public String getType() {
+        return "T";
+    }
 }

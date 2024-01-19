@@ -67,13 +67,11 @@ public class PlayerManager {
      * @param d4       a Deck containing the card of cpu 3
      * @param l4       an int representing the difficult level
      */
-    public PlayerManager(String p1, Deck d1, Boolean tutorial, String p2, Deck d2, int l2, String p3, Deck d3, int l3,
-            String p4,
-            Deck d4, int l4, int t1, int t2, int t3, int t4) {
-        players[t1] = new Human(p1, d1, tutorial);
-        players[t2] = new Cpu(p2, d2, l2);
-        players[t3] = new Cpu(p3, d3, l3);
-        players[t4] = new Cpu(p4, d4, l4);
+    public PlayerManager(Player p1, Player p2, Player p3, Player p4, int t1, int t2, int t3, int t4) {
+        players[t1] = p1;
+        players[t2] = p2;
+        players[t3] = p3;
+        players[t4] = p4;
 
         // insertion sort for sorting players alphabetically
         defaultList = players;
