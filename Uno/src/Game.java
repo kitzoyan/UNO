@@ -22,7 +22,7 @@ public class Game {
     protected String name;
     protected Card currentCard = null;
     protected String currentColour;
-    protected final static int INIT_CARDS = 7;
+    protected final static int INIT_CARDS = 2;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
@@ -49,7 +49,7 @@ public class Game {
         // Draws 7 cards for all
         for (int j = 0; j < players.getSetPlayers(); j++) {
             for (int i = 0; i < INIT_CARDS; i++) {
-                players.getPlayer(j).deck.moveCard(drawPile, drawPile.drawRandom());
+                players.getPlayer(j).getDeck().moveCard(drawPile, drawPile.drawRandom());
             }
         }
         System.out.println("============================================ RUNNING NEW GAME");
@@ -131,16 +131,16 @@ public class Game {
         if (gameSaved) {
             return true; // exit the loop if the game is saved
         }
-        setCurrentCard(chosen, players.getCurrentPlayer() instanceof Cpu, players.getCurrentPlayer().deck);
+        setCurrentCard(chosen, players.getCurrentPlayer() instanceof Cpu, players.getCurrentPlayer().getDeck());
         if (chosen == null) {
             System.out.println("Current card: " + currentCard);
         } else {
             System.out.println(players.getCurrentPlayer().getName() + " played: " + currentCard);
         }
         System.out.println("Current colour: " + currentColour);
-        System.out.println("\nCard(s) left: " + players.getCurrentPlayer().deck.getNumCards());
+        System.out.println("\nCard(s) left: " + players.getCurrentPlayer().getDeck().getNumCards());
 
-        return (players.getCurrentPlayer().deck.isEmpty());
+        return (players.getCurrentPlayer().getDeck().isEmpty());
 
     }
 
@@ -232,6 +232,35 @@ public class Game {
             }
         }
 
+    }
+
+    /**
+     * Searches through all CPU players and checks for anyone who needs Uno has not
+     * called it
+     * 
+     */
+    public boolean catchUno() {
+        boolean found = false;
+        for (int i = 0; i < players.getSetPlayers(); i++) {
+            if (players.getPlayer(i) instanceof Cpu) {
+                Cpu c = (Cpu) players.getPlayer(i);
+
+                // If "Uno" is required
+                if (c.getNeedUno()) {
+                    // But it was not called
+                    if (!c.getCalledUno()) {
+                        found = true;
+                        System.out.println(c.getName() + " forgot to call Uno and drew 2");
+                        // Draw 2 random cards as punishment
+                        c.getDeck().moveCard(drawPile, drawPile.drawRandom());
+                        c.getDeck().moveCard(drawPile, drawPile.drawRandom());
+                        c.callUno();
+
+                    }
+                }
+            }
+        }
+        return found;
     }
 
     public PlayerManager getPlayers() {

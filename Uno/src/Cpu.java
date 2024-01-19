@@ -71,6 +71,7 @@ public class Cpu extends Player {
         deck.moveCard(drawDeck, newDrawn);
         System.out.println(name + " drew a card");
         if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
+            callUno();
             return newDrawn;
         }
         return null;
@@ -180,18 +181,20 @@ public class Cpu extends Player {
      * Has a 50% chance to call UNO
      */
     public void callUno() {
-        if (deck.getNumCards() > 1) {
+        // Because the CPU calls uno before their card is removed, so numCards is 2
+        if (deck.getNumCards() > 2) {
             calledUno = false;
             needUno = false;
             return;
-        } else if (deck.getNumCards() == 1) {
-            Random rand = new Random();
-            if (rand.nextInt(1) == 0) {
-                System.out.println(name + "called Uno");
+        } else if (deck.getNumCards() == 2) {
+            needUno = true;
+            int rand = Math.round((float) Math.random());
+            if (rand == 1) {
+                System.out.println("\n" + name + " called Uno\n");
                 this.calledUno = true;
             }
         } else {
-            System.out.println("SYSTEM: (Cpu) The game should have ended!");
+            System.out.println("SYSTEM: (Cpu) The game should now end!");
         }
     }
 

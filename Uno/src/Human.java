@@ -72,8 +72,13 @@ public class Human extends Player {
                 System.out.print("[input]: ");
                 input = Integer.parseInt(sc.nextLine()); // Call Uno
                 if (input == 1) {
-                    exit = true;
-                    // Call game from static uno
+                    boolean valid = Uno.getCurrentGame().catchUno();
+                    // If you called wrong, you draw two cards
+                    if (!valid) {
+                        System.out.println("No players required \"Uno\"\nYour call was invalid so you drew 2\n");
+                        deck.moveCard(drawDeck, drawDeck.drawRandom());
+                        deck.moveCard(drawDeck, drawDeck.drawRandom());
+                    }
                 } else if (input == 2) { // Play Cards
                     chosen = selectCards(sc, currentCard, currentColour, drawDeck);
                     exit = true;
@@ -97,7 +102,9 @@ public class Human extends Player {
         if (chosen == null) {
             // System.out.println("You drew a card.");
         } else {
-            // System.out.println("You played: " + chosen);
+            if (deck.getNumCards() == 2) {
+                System.out.println("You called Uno");
+            }
         }
 
         return chosen;

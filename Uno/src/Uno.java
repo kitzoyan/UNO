@@ -434,11 +434,13 @@ public class Uno {
      */
     private static String emptySlot() {
         String empty = "| empty";
+        // System.out.printf("%s, %s, %s", checkGame(SLOT1FILE), checkGame(SLOT2FILE),
+        // checkGame(SLOT3FILE));
         if (empty.equals(checkGame(SLOT1FILE))) {
             return SLOT1FILE;
         } else if (empty.equals(checkGame(SLOT2FILE))) {
             return SLOT2FILE;
-        } else if (empty.equals(checkGame(SLOT2FILE))) {
+        } else if (empty.equals(checkGame(SLOT3FILE))) {
             return SLOT3FILE;
         }
         return null;

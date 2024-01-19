@@ -130,7 +130,7 @@ public class PlayerManager {
      */
     public void drawCardforNext(int cardsForNext, Deck drawDeck) {
         for (int i = 0; i < cardsForNext; i++) {
-            players[1].deck.moveCard(drawDeck, drawDeck.drawRandom());
+            players[1].getDeck().moveCard(drawDeck, drawDeck.drawRandom());
         }
         System.out.println(players[1].getName() + " drew " + cardsForNext);
     }
@@ -159,7 +159,7 @@ public class PlayerManager {
     }
 
     public Player searchPlayer(String name) {
-        int bottom = 0, top = SET_PLAYERS, index = -1, middle;
+        int bottom = 0, top = SET_PLAYERS - 1, index = -1, middle;
         boolean found = false;
         while (players[bottom].getName().compareTo(players[top].getName()) <= 0 && !found) {
             middle = (bottom + top) / 2;
