@@ -36,8 +36,8 @@ public class Tutorial extends Game {
      *
      * @param fileName the specified file name that stores the game file
      */
-    public Tutorial(String fileName) {
-        super(fileName);
+    public Tutorial(String fileName, Deck fullDeck) {
+        super(fileName, fullDeck);
         Human temp = (Human) (players.searchHuman());
         temp.toggleTutorial();
 

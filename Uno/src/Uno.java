@@ -228,11 +228,11 @@ public class Uno {
                 temp = players.getPlayer(i);
                 writer.write(temp.getName());
                 if (temp instanceof Human) {
-                    writer.write("human\n");
+                    writer.write("\nhuman\n");
                 } else {
-                    writer.write("cpu\n");
+                    writer.write("\ncpu\n");
                 }
-                writer.write(i);
+                writer.write("" + i);
                 writer.write("\n" + temp.getDeck().toString() + "\n\n");
             }
             writer.close();
@@ -370,9 +370,9 @@ public class Uno {
 
     private static void createGameObject(String fileName) {
         if (isTutorial(fileName)) {
-            currentGame = new Tutorial(fileName);
+            currentGame = new Tutorial(fileName, fullDeck);
         } else {
-            currentGame = new Game(fileName);
+            currentGame = new Game(fileName, fullDeck);
         }
     }
 

@@ -16,13 +16,17 @@
 |=============================================================================*/
 import Cards.*;
 import Cards.Number;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Game {
     protected String name;
     protected Card currentCard = null;
     protected String currentColour;
-    protected final static int INIT_CARDS = 2;
+    protected final static int INIT_CARDS = 7;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
@@ -68,9 +72,59 @@ public class Game {
         // run();
     }
 
-    public Game(String gameFile) {
+    public Game(String gameFile, Deck fullDeck) {
+        String input;
+        String playerName, cpu1, cpu2, cpu3;
+        drawPile = new Deck(fullDeck);
+        discardPile = new Deck();
+
         // Note: upon designing PM, you must make sure the ACTUAL CURRENT PLAYER at
         // players[0] is player[3] so that when run, will be sorted first
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(gameFile));
+            input = reader.readLine();
+            while (!input.equals("")) { // skip the date and the game name
+                input = reader.readLine();
+            }
+            reader.readLine(); // skip the game mode
+
+            input = reader.readLine();
+            currentCard = makeNewCard(input);
+            currentColour = reader.readLine();
+
+            for (int i = 0; i < 2; i++) {
+                reader.readLine();
+                reader.readLine();
+                reader.readLine();
+            }
+
+            input = reader.readLine(); // the number of cards in discard pile
+
+            writer.write("\ndiscard\n");
+            writer.write(discardPile.getNumCards() + "\n");
+            writer.write(discardPile.toString() + "\n");
+
+            writer.write("draw\n");
+            writer.write(drawPile.getNumCards() + "\n");
+            writer.write(drawPile.toString() + "\n\n");
+
+            Player temp;
+            for (int i = 0; i < 4; i++) {
+                temp = players.getPlayer(i);
+                writer.write(temp.getName());
+                if (temp instanceof Human) {
+                    writer.write("human\n");
+                } else {
+                    writer.write("cpu\n");
+                }
+                writer.write(i);
+                writer.write("\n" + temp.getDeck().toString() + "\n\n");
+            }
+            writer.close();
+            System.out.println("Game Saved");
+        } catch (IOException ioe) {
+            System.out.println("SYSTEM: (UNO) There are an error saving the game");
+        }
     }
 
     /**
@@ -293,6 +347,42 @@ public class Game {
 
     public void toggleGameSaved() {
         gameSaved = !gameSaved;
+    }
+
+    /**
+     * Translate the text inside the text file into a card
+     */
+    private Card makeNewCard(String input) {
+        Card c = null;
+        String type;
+        String number;
+
+        type = input.split(" ")[0];
+        number = (input.split(" ")[1]);
+
+        if (type.equals("wild")) {
+            if (type.equals("change colour")) {
+                c = new ColourChange();
+            } else if (type.equals("+4")) {
+                c = new PlusFour();
+            }
+        } else {
+            try {
+                int num = Integer.parseInt(number);
+                c = new Number(type, num);
+            } catch (NumberFormatException e) {
+                if (type.equals("+2")) {
+                    c = new PlusTwo(type);
+                } else if (type.equals("Reverse")) {
+                    c = new Reverse(type);
+                } else if (type.equals("Skip")) {
+                    c = new Skip(type);
+                }
+            }
+
+        }
+
+        return c;
     }
 
 }
