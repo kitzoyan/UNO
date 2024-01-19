@@ -126,12 +126,13 @@ public class Game {
                     temp[i] = new Cpu(names[i], decks[i]);
                 }
             }
-
-            players = new PlayerManager(temp[0], temp[1], temp[2], temp[3],
-                    order[3], order[0], order[1], order[2]);
+            players = new PlayerManager(temp[3], temp[0], temp[1], temp[2], order[0], order[1], order[2], order[3]);
+            System.out.println("Starting player: " + players.getPlayer(1).getName());
+            System.out.println("The current card: " + currentCard);
+            System.out.println("Current colour: " + currentColour);
             reader.close();
         } catch (IOException ioe) {
-            System.out.println("SYSTEM: (UNO) There are an error saving the game");
+            System.out.println("SYSTEM: (UNO) There are an error loading the game");
         }
     }
 
@@ -184,11 +185,10 @@ public class Game {
             System.out.println("SYSTEM: (Game) Thread was interputed");
         }
 
-        System.out
-                .println(
-                        "============================================ "
-                                + players.getCurrentPlayer().getName().toUpperCase()
-                                + "'s TURN");
+        System.out.println(
+                "============================================ "
+                        + players.getCurrentPlayer().getName().toUpperCase()
+                        + "'s TURN");
         Card chosen = players.getCurrentPlayer().play(currentCard, currentColour, drawPile);
         if (gameSaved) {
             return true; // exit the loop if the game is saved

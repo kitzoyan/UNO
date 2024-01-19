@@ -35,7 +35,10 @@ public class PlayerManager {
         players[3] = new Cpu(p4);
 
         // insertion sort for sorting players alphabetically
-        defaultList = players;
+        defaultList[0] = players[0];
+        defaultList[1] = players[1];
+        defaultList[2] = players[2];
+        defaultList[3] = players[3];
         int j;
         Player temp;
         for (int i = 0; i < SET_PLAYERS; i++) {
@@ -68,13 +71,16 @@ public class PlayerManager {
      * @param l4       an int representing the difficult level
      */
     public PlayerManager(Player p1, Player p2, Player p3, Player p4, int t1, int t2, int t3, int t4) {
-        players[t1] = p1;
-        players[t2] = p2;
-        players[t3] = p3;
-        players[t4] = p4;
+        players[0] = p1;
+        players[1] = p2;
+        players[2] = p3;
+        players[3] = p4;
 
         // insertion sort for sorting players alphabetically
-        defaultList = players;
+        defaultList[0] = players[0];
+        defaultList[1] = players[1];
+        defaultList[2] = players[2];
+        defaultList[3] = players[3];
         int j;
         Player temp;
         for (int i = 0; i < SET_PLAYERS; i++) {
