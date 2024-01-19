@@ -317,52 +317,52 @@ public class Uno {
             while (input != null) {
                 cardRules = "";
                 if (input.equals(reverse)) {
-                    for (int i = 0; !(input.equals("")); i++) {
-                        input = reader.readLine();
+                    input = reader.readLine();
+                    while (input != null && !(input.equals(""))) {
                         cardRules = cardRules + "\n" + input;
+                        input = reader.readLine();
                     }
-                    reader.readLine();
                     Reverse.setDefinition(cardRules);
                 } else if (input.equals(number)) {
-                    for (int i = 0; !(input.equals("")); i++) {
-                        input = reader.readLine();
+                    input = reader.readLine();
+                    while (input != null && !(input.equals(""))) {
                         cardRules = cardRules + "\n" + input;
+                        input = reader.readLine();
                     }
-                    reader.readLine();
                     Number.setDefinition(cardRules);
                 } else if (input.equals(plusFour)) {
-                    for (int i = 0; !(input.equals("")); i++) {
-                        input = reader.readLine();
+                    input = reader.readLine();
+                    while (input != null && !(input.equals(""))) {
                         cardRules = cardRules + "\n" + input;
+                        input = reader.readLine();
                     }
-                    reader.readLine();
                     PlusFour.setDefinition(cardRules);
                 } else if (input.equals(plusTwo)) {
-                    for (int i = 0; !(input.equals("")); i++) {
-                        input = reader.readLine();
+                    input = reader.readLine();
+                    while (input != null && !(input.equals(""))) {
                         cardRules = cardRules + "\n" + input;
+                        input = reader.readLine();
                     }
-                    reader.readLine();
                     PlusTwo.setDefinition(cardRules);
                 } else if (input.equals(skip)) {
-                    for (int i = 0; !(input.equals("")); i++) {
-                        input = reader.readLine();
+                    input = reader.readLine();
+                    while (input != null && !(input.equals(""))) {
                         cardRules = cardRules + "\n" + input;
+                        input = reader.readLine();
                     }
-                    reader.readLine();
                     Skip.setDefinition(cardRules);
                 } else if (input.equals(colourChange)) {
-                    for (int i = 0; !(input.equals("")); i++) {
-                        input = reader.readLine();
+                    input = reader.readLine();
+                    while (input != null && !(input.equals(""))) {
                         cardRules = cardRules + "\n" + input;
+                        input = reader.readLine();
                     }
-                    reader.readLine();
                     ColourChange.setDefinition(cardRules);
                 } else {
                     input = reader.readLine();
                 }
             }
-
+            reader.close();
         } catch (IOException ioe) {
             System.out.println("SYSTEM: (UNO) There are an error reading the game rules");
         }
