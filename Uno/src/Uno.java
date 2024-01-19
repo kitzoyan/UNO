@@ -67,7 +67,8 @@ public class Uno {
                 if (emptySlot() != null) {
                     createGame(); // will create the game and run it
                 } else {
-                    System.out.println("Delete a game before creating");
+                    System.out.println("Delete a game before making another");
+                    Uno.wait(2000);
                 }
             } else if (input == 2) { // loading a game
 
@@ -491,5 +492,18 @@ public class Uno {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Stall the program
+     * 
+     * @param msec
+     */
+    public static void wait(int msec) {
+        try {
+            Thread.sleep(msec);
+        } catch (InterruptedException e) {
+            System.out.println("SYSTEM: (Game) Thread was interputed");
+        }
     }
 }

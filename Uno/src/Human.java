@@ -62,20 +62,22 @@ public class Human extends Player {
 
         // Print your choices
         String reveal = (tutorialMode ? "\t4. Reveal Cards\n" : "");
-        System.out.printf("\t1. Attempt to Call Uno\n\t2. Play\n\t3. Quit and Save Game\n%s", reveal);
+        // System.out.printf("\t1. Attempt to Call Uno\n\t2. Play\n\t3. Quit and Save
+        // Game\n%s", reveal);
         boolean exit = false;
         Card chosen = null;
 
         // Run the user choice option loop
         while (!exit) {
+            System.out.printf("\t1. Attempt to Call Uno\n\t2. Play\n\t3. Quit and Save Game\n%s", reveal);
             try {
-                System.out.print("[input]: ");
+                System.out.print("Turn [input]: ");
                 input = Integer.parseInt(sc.nextLine()); // Call Uno
                 if (input == 1) {
                     boolean valid = Uno.getCurrentGame().catchUno();
                     // If you called wrong, you draw two cards
                     if (!valid) {
-                        System.out.println("No players required \"Uno\"\nYour call was invalid so you drew 2\n");
+                        System.out.println("\nNo players required \"Uno\"\nYour call was invalid so you drew 2\n");
                         deck.moveCard(drawDeck, drawDeck.drawRandom());
                         deck.moveCard(drawDeck, drawDeck.drawRandom());
                     }
@@ -88,7 +90,7 @@ public class Human extends Player {
                     exit = true;
                     // Call game from static uno
                 } else if (input == 4 && tutorialMode) { // Reveal cards
-                    exit = true;
+                    Uno.getCurrentGame().revealCards();
                     // Call game from static uno
                 } else {
                     throw new NumberFormatException("");
@@ -134,7 +136,7 @@ public class Human extends Player {
         boolean exit = false;
         while (!exit) {
             try {
-                System.out.print("[input]: ");
+                System.out.print("Card [input]: ");
                 input = Integer.parseInt(sc.nextLine());
                 if (input > 1 && input < numChoices) {
                     Card chosen = deck.getCard(input - 2);
@@ -185,7 +187,7 @@ public class Human extends Player {
         // Run user loop
         while (!exit) {
             try {
-                System.out.print("[input]: ");
+                System.out.print("Function [input]: ");
                 input = Integer.parseInt(sc.nextLine());
                 if (input == 1) {
                     System.out.println(toKnow.getDefinition());
@@ -224,7 +226,7 @@ public class Human extends Player {
             // Run user loop
             while (!exit) {
                 try {
-                    System.out.print("[input]: ");
+                    System.out.print("Drawn [input]: ");
                     input = Integer.parseInt(sc.nextLine());
                     if (input == 1) {
                         System.out.println();

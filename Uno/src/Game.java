@@ -21,8 +21,9 @@ import java.util.*;
 public class Game {
     protected String name;
     protected Card currentCard = null;
+    protected Card previousCard = null; // Used only to check if people drew instead of played
     protected String currentColour;
-    protected final static int INIT_CARDS = 2;
+    protected final static int INIT_CARDS = 7;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
@@ -85,11 +86,7 @@ public class Game {
         if (!gameSaved) {
             System.out.println("============================================ END");
             System.out.println(players.getCurrentPlayer().getName() + " was the winner. Thanks for playing!");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                System.out.println("SYSTEM: (Game) Thread was interputed");
-            }
+            Uno.wait(3000);
         }
         return;
     }
@@ -99,8 +96,11 @@ public class Game {
      * - applies effects on players from current card
      * - moves to next player
      * - returns a card from the player
+     * - sets the current card
+     * - if drawpile is all used up, substitute discardpile in
      * 
-     * @return
+     * @return <code>true</code> if one player has 0 cards left and has won the
+     *         game, or user chose to save game
      */
     private boolean turn() {
         // If all cards used
@@ -109,18 +109,18 @@ public class Game {
             drawPile = discardPile;
             discardPile = new Deck();
         }
-        boolean toSkip = applyCurrentCard();
+
+        // Check if the previous card is the same identity by adress as the the current,
+        // such do NOT APPLY the card
+        boolean toSkip = (currentCard == previousCard ? false : applyCurrentCard());
+
         if (toSkip) {
             System.out.println(players.getPlayer(1).getName() + " was skipped");
         }
         players.sortNextPlayer(toSkip);
 
         // Delay the output so players can read
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            System.out.println("SYSTEM: (Game) Thread was interputed");
-        }
+        Uno.wait(2000);
 
         System.out
                 .println(
@@ -139,7 +139,7 @@ public class Game {
         }
         System.out.println("Current colour: " + currentColour);
         System.out.println("\nCard(s) left: " + players.getCurrentPlayer().getDeck().getNumCards());
-
+        previousCard = currentCard;
         return (players.getCurrentPlayer().getDeck().isEmpty());
 
     }
@@ -201,9 +201,10 @@ public class Game {
                     System.out.println("Choose a colour:\n\t1. Red\n\t2. Yellow\n\t3. Green\n\t4. Blue");
                     while (!exit) {
                         try {
-                            System.out.println("[input]: ");
+                            System.out.print("Colour [input]: ");
                             input = Integer.parseInt(sc.nextLine());
                             if (input > 0 && input < 5) {
+                                System.out.println();
                                 exit = true;
                             } else {
                                 throw new NumberFormatException("");
@@ -236,8 +237,9 @@ public class Game {
 
     /**
      * Searches through all CPU players and checks for anyone who needs Uno has not
-     * called it
+     * called it. This method should only be called by Human
      * 
+     * @return <code>true</code> if
      */
     public boolean catchUno() {
         boolean found = false;
@@ -250,7 +252,7 @@ public class Game {
                     // But it was not called
                     if (!c.getCalledUno()) {
                         found = true;
-                        System.out.println(c.getName() + " forgot to call Uno and drew 2");
+                        System.out.println("\n" + c.getName() + " forgot to call Uno and drew 2\n");
                         // Draw 2 random cards as punishment
                         c.getDeck().moveCard(drawPile, drawPile.drawRandom());
                         c.getDeck().moveCard(drawPile, drawPile.drawRandom());
@@ -261,6 +263,74 @@ public class Game {
             }
         }
         return found;
+    }
+
+    /**
+     * Displays the GUI for user interface upon choosing to view all hidden decks.
+     * This method should only be called from Human with TUTORIAL toggled on.
+     * This method gives options to view public decks and other player decks.
+     */
+    public void revealCards() {
+        // System.out.println("\t1. Reveal Cards in Draw Pile\n\t2. Reveal Cards in
+        // Discard Pile\n\t3. Reveal a Player's Deck\n\t4. Return");
+        int input = 0;
+        boolean exit = false;
+        while (!exit) {
+            System.out.println(
+                    "\t1. Reveal Cards in Draw Pile\n\t2. Reveal Cards in Discard Pile\n\t3. Reveal a Player's Deck\n\t4. Return");
+            try {
+                System.out.print("Reveal[input]: ");
+                input = Integer.parseInt(sc.nextLine());
+                if (input == 1) {
+                    System.out.println("============================================ REVEAL DRAW PILE");
+                    System.out.println(drawPile);
+                } else if (input == 2) {
+                    System.out.println("============================================ REVEAL DISCARD PILE");
+                    System.out.println(discardPile);
+                } else if (input == 3) {
+                    revealPlayer();
+                } else if (input == 4) {
+                    return;
+                } else {
+                    throw new NumberFormatException("");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Re-enter a valid option: ");
+            }
+        }
+
+    }
+
+    /**
+     * Prints the specific GUI for choosing to reveal a specific player's deck.
+     * You must know who you want to reveal by name.
+     */
+    private void revealPlayer() {
+        System.out.println("============================================ REVEAL PLAYER");
+        System.out.println("Type in the name of the player you wish to reveal. Type in -1 to go back");
+        String input = null;
+        boolean exit = false;
+        while (!exit) {
+            try {
+                System.out.print("Name [input]: ");
+                input = sc.nextLine();
+                if (Integer.parseInt(input) == -1) {
+                    return;
+                } else {
+                    System.out.println("No name was found. Re-enter a valid option: ");
+                }
+            } catch (NumberFormatException e) { // This time because string input there is no false answer
+                boolean found = false;
+                for (int i = 0; i < players.getSetPlayers(); i++) {
+                    if (players.getPlayer(i).getName().equalsIgnoreCase(input)) {
+                        System.out.println("\n" + players.getPlayer(i).getDeck() + "\n");
+                        return;
+                    }
+                }
+                System.out.println("No name was found. Re-enter a valid option: ");
+            }
+        }
+
     }
 
     public PlayerManager getPlayers() {
