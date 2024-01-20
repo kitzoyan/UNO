@@ -380,19 +380,32 @@ public class Deck {
 
     /**
      * Searches and returns the total number of cards of a specified colour within
-     * the deck
+     * the deck using recursion. This method is a wrapper.
      * 
      * @param colour
      * @return an integer. Return 0 if none match.
      */
     public int searchColourCards(String colour) {
-        int sum = 0;
-        for (int i = 0; i < numCards; i++) {
-            if (cards[i].getColour().equals(colour)) {
-                sum++;
-            }
+        return searchColourCardsRecursion(colour, 0);
+    }
+
+    /**
+     * Searches and returns the total number of cards of a specified colour within
+     * the deck using recursion.
+     * 
+     * @param colour
+     * @param index  the current position of interest in the card list
+     * @return a sum of cards
+     */
+    private int searchColourCardsRecursion(String colour, int index) {
+        if (index == numCards) {
+            return 0;
         }
-        return sum;
+        if (cards[index].getColour().equals(colour)) {
+            return searchColourCardsRecursion(colour, index + 1) + 1;
+        } else {
+            return searchColourCardsRecursion(colour, index + 1);
+        }
     }
 
     public int getNumCards() {
