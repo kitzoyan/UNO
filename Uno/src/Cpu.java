@@ -20,12 +20,14 @@ public class Cpu extends Player {
     private boolean needUno = false;
     private int focusColourNum = 0; // 0 = red, 1 = yellow, 2 = green, 3 = blue
 
-    public Cpu(String name) {
+    public Cpu(String name, int difficulty) {
         super(name);
+        this.difficulty = difficulty;
     }
 
-    public Cpu(String name, Deck deck) {
+    public Cpu(String name, Deck deck, int difficulty) {
         super(deck, name);
+        this.difficulty = difficulty;
     }
 
     public Cpu(String name, Deck deck, int difficulty, boolean calledUno, boolean needUno) {
@@ -37,6 +39,10 @@ public class Cpu extends Player {
 
     public void setDifficulty(int n) {
         this.difficulty = difficulty;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
     }
 
     /**

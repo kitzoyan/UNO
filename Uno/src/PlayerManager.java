@@ -28,11 +28,11 @@ public class PlayerManager {
      * @param p3 a String represents the name of the cpu
      * @param p4 a String represents the name of the cpu
      */
-    public PlayerManager(String p1, String p2, String p3, String p4) {
+    public PlayerManager(String p1, String p2, String p3, String p4, int difficulty) {
         players[0] = new Human(p1);
-        players[1] = new Cpu(p2);
-        players[2] = new Cpu(p3);
-        players[3] = new Cpu(p4);
+        players[1] = new Cpu(p2, difficulty);
+        players[2] = new Cpu(p3, difficulty);
+        players[3] = new Cpu(p4, difficulty);
 
         // insertion sort for sorting players alphabetically
         defaultList[0] = players[0];

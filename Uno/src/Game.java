@@ -15,14 +15,11 @@
 |  game mode, like tutorial mode.                                             |
 |=============================================================================*/
 import Cards.*;
-import Cards.Number;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-
-import javax.crypto.spec.DESKeySpec;
 
 public class Game {
     protected String name;
@@ -47,9 +44,10 @@ public class Game {
      * @param cpu3       the name for a cpu
      * @param fullDeck   the full Deck from Uno
      */
-    public Game(String gameName, String playerName, String cpu1, String cpu2, String cpu3, Deck fullDeck) {
+    public Game(String gameName, String playerName, String cpu1, String cpu2, String cpu3, Deck fullDeck,
+            int difficulty) {
         name = gameName;
-        players = new PlayerManager(playerName, cpu1, cpu2, cpu3);
+        players = new PlayerManager(playerName, cpu1, cpu2, cpu3, difficulty);
         drawPile = new Deck(fullDeck);
         discardPile = new Deck();
 
@@ -77,6 +75,7 @@ public class Game {
 
     public Game(String gameFile, Deck fullDeck) {
         String input, color, type, player;
+        int difficulty = 3;
         String[] names = new String[4];
         Deck[] decks = new Deck[4];
         int[] order = new int[4];
@@ -112,6 +111,9 @@ public class Game {
             for (int i = 0; i < 4; i++) {
                 names[i] = reader.readLine();
                 player = reader.readLine();
+                if (player.equals("cpu")) {
+                    difficulty = Integer.parseInt(reader.readLine());
+                }
                 order[i] = Integer.parseInt(reader.readLine());
                 input = reader.readLine();
                 decks[i] = new Deck();
@@ -124,7 +126,8 @@ public class Game {
                 if (player.equals("human")) {
                     temp[i] = new Human(names[i], decks[i]);
                 } else {
-                    temp[i] = new Cpu(names[i], decks[i]);
+                    temp[i] = new Cpu(names[i], decks[i], difficulty);
+
                 }
             }
             players = new PlayerManager(temp[3], temp[0], temp[1], temp[2], order[0], order[1], order[2], order[3]);

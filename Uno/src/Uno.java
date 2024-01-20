@@ -91,7 +91,7 @@ public class Uno {
      * Create the game
      */
     private static void createGame() {
-        int input;
+        int input, difficulty;
         boolean tutorial;
         String gameName, player, cpu1, cpu2, cpu3;
 
@@ -115,12 +115,14 @@ public class Uno {
         cpu2 = verifyInput();
         System.out.print("CPU #3: ");
         cpu3 = verifyInput();
+        System.out.println("Enter difficulty(1-3): ");
+        difficulty = verifyInput(3);
 
         if (tutorial) {
-            currentGame = new Tutorial(gameName, player, cpu1, cpu2, cpu3, fullDeck);
+            currentGame = new Tutorial(gameName, player, cpu1, cpu2, cpu3, fullDeck, difficulty);
             currentGame.run();
         } else {
-            currentGame = new Game(gameName, player, cpu1, cpu2, cpu3, fullDeck);
+            currentGame = new Game(gameName, player, cpu1, cpu2, cpu3, fullDeck, difficulty);
             currentGame.run();
         }
     }
@@ -233,6 +235,7 @@ public class Uno {
 
             Player temp;
             Deck deck;
+            int difficulty;
 
             for (int i = 0; i < 4; i++) {
                 temp = players.getPlayer(i);
@@ -240,11 +243,13 @@ public class Uno {
 
                 writer.write(temp.getName());
                 if (temp instanceof Human) {
-                    writer.write("\nhuman\n");
+                    writer.write("\nhuman");
                 } else {
                     writer.write("\ncpu\n");
+                    difficulty = ((Cpu) temp).getDifficulty();
+                    writer.write("" + difficulty);
                 }
-                writer.write("" + i + "\n");
+                writer.write("\n" + i + "\n");
                 for (int j = 0; j < deck.getNumCards(); j++) {
                     writer.write(deck.getCard(j).getColour() + "\n" + deck.getCard(j).getType() + "\n");
                 }
