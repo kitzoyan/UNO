@@ -116,9 +116,13 @@ public class PlayerManager {
      * 
      */
     public void reverseOrder() {
-        Player temp = players[1];
-        players[1] = players[3];
-        players[3] = temp;
+        int halfIndex = (SET_PLAYERS % 2 == 0 ? SET_PLAYERS / 2 : SET_PLAYERS / 2 + 1);
+        for (int i = 1; i < halfIndex; i++) {
+            Player temp = players[i];
+            players[i] = players[SET_PLAYERS - i];
+            players[SET_PLAYERS - i] = temp;
+        }
+
         System.out.println("The order was reversed");
     }
 

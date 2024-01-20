@@ -90,7 +90,7 @@ public class Human extends Player {
                     exit = true;
                     // Call game from static uno
                 } else if (input == 4 && tutorialMode) { // Reveal cards
-                    Uno.getCurrentGame().revealCards();
+                    ((Tutorial) Uno.getCurrentGame()).revealCards();
                     // Call game from static uno
                 } else {
                     throw new NumberFormatException("");
@@ -218,6 +218,7 @@ public class Human extends Player {
         Card newDrawn = drawDeck.drawRandom();
         System.out.println("You drew: " + newDrawn);
         deck.moveCard(drawDeck, newDrawn);
+        Uno.wait(1000);
         if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
             System.out.println("This card is valid to play. Do you wish to play it?\n\t1. Yes\n\t2. No");
             boolean exit = false;
@@ -243,6 +244,7 @@ public class Human extends Player {
         } else {
             System.out.println("This card cannot be played and has been stored in your deck\n");
         }
+        Uno.wait(1000);
         return null;
     }
 
