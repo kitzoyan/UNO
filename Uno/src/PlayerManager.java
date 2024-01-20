@@ -166,6 +166,13 @@ public class PlayerManager {
         return players[0];
     }
 
+    /**
+     * Searches the player using the specified name, this game uses insertion search
+     * to search player using the name
+     * 
+     * @param name
+     * @return
+     */
     public Player searchPlayer(String name) {
         int bottom = 0, top = SET_PLAYERS - 1, index = -1, middle;
         boolean found = false;
