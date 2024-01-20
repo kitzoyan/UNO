@@ -158,6 +158,7 @@ public class Uno {
                 exit = true; // go back to the main menu
             } else {
                 System.out.println("The game slot you entered is empty");
+                wait(2000);
             }
         }
     }
@@ -191,6 +192,7 @@ public class Uno {
                 exit = true; // go back to the main menu
             } else {
                 System.out.println("The game slot you entered is empty");
+                wait(2000);
             }
 
         }
@@ -491,6 +493,7 @@ public class Uno {
                 BufferedReader reader = new BufferedReader(new FileReader(fileName));
                 reader.readLine();
                 reader.readLine();
+                reader.readLine();
                 if (reader.readLine().equals("tutorial")) {
                     reader.close();
                     return true;
@@ -544,7 +547,8 @@ public class Uno {
                 "Average Rating: YUNO UNO has received glowing reviews among students, boasting an impressive average rating of 4.99 stars on app stores.\n"
                 +
                 "\n" +
-                "If you encountered any issues and bugs please reach out to adrianyhlock@gmail.com or kitzoyan2@gmail.com\n");
+                "If you encounter any issues and bugs, please reach out to adrianyhlock@gmail.com or kitzoyan2@gmail.com\n");
+        wait(2000);
     }
 
     /*

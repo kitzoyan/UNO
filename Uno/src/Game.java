@@ -138,6 +138,10 @@ public class Game {
                 }
             }
             players = new PlayerManager(temp[3], temp[0], temp[1], temp[2], order[0], order[1], order[2], order[3]);
+            System.out.printf("Welcome, the order: %s, %s, %s, and %s\n", players.getPlayer(1).getName(),
+                    players.getPlayer(2).getName(),
+                    players.getPlayer(3).getName(),
+                    players.getPlayer(0).getName());
             System.out.println("Starting player: " + players.getPlayer(1).getName());
             System.out.println("The current card: " + currentCard);
             System.out.println("Current colour: " + currentColour);

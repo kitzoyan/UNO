@@ -45,7 +45,7 @@ public class ColourChange extends Card {
     }
 
     public String toString() {
-        return "wild changecolour";
+        return "wild change colour";
     }
 
     public boolean equals(Card other) {
