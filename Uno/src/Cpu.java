@@ -26,10 +26,6 @@ public class Cpu extends Player {
 
     public Cpu(String name, Deck deck) {
         super(deck, name);
-<<<<<<< HEAD
-=======
-        this.difficulty = difficultly;
->>>>>>> RevealCards-Robin
     }
 
     public Cpu(String name, Deck deck, int difficulty, boolean calledUno, boolean needUno) {

@@ -376,12 +376,13 @@ public class Game {
     }
 
     /**
-<<<<<<< HEAD
      * Translate the text inside the text file into a card
      */
     private Card returnNewCard(String color, String type) {
         return drawPile.getCard(drawPile.searchSpecificCard(color, type));
-=======
+    }
+
+    /*
      * Searchs through all players and checks if anyone is approaching 0 cards.
      * 
      * @return <code>true</code> if someone is below 4
@@ -394,7 +395,6 @@ public class Game {
             }
         }
         return (minCards < 4);
->>>>>>> RevealCards-Robin
     }
 
 }

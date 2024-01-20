@@ -201,16 +201,8 @@ public class Deck {
      *         found.
      */
     public int searchSpecificCard(String colour, String type) {
-<<<<<<< HEAD
-        // type = "class Cards." + type;
-        Card temporary = makeNewCard(colour, type);
-        if (temporary == null) {
-            System.out.println("null");
-        }
-=======
         Card temporary = makeNewCard(colour, type);
         // System.out.println(temporary);
->>>>>>> RevealCards-Robin
         return searchSpecificCard(temporary);
     }
 
