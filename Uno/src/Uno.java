@@ -61,8 +61,9 @@ public class Uno {
             System.out.println("Slot #2 " + checkGame(SLOT2FILE));
             System.out.println("Slot #3 " + checkGame(SLOT3FILE) + "\n");
             System.out.println(
-                    "\t1. Create a new Game\n" + "\t2. Continue a game\n" + "\t3. Delete a game\n" + "\t4. Close Game");
-            input = verifyInput(4); // make sure the input is within 4
+                    "\t1. Create a new Game\n" + "\t2. Continue a game\n" + "\t3. Delete a game\n"
+                            + "\t4. Program Details\n" + "\t5. Close Game");
+            input = verifyInput(5); // make sure the input is within 4
             if (input == 1) { // create a game
                 if (emptySlot() != null) {
                     createGame(); // will create the game and run it
@@ -77,6 +78,8 @@ public class Uno {
                 // deleting a game
                 deleteGame();
             } else if (input == 4) {
+                programDescription();
+            } else if (input == 5) {
                 exit = true;
             }
         }
@@ -502,5 +505,29 @@ public class Uno {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Print out the version details, contributors and statistics
+     */
+    private static void programDescription() {
+        System.out.println("\n" +
+                "Title: YUNO UNO\n" +
+                "Version: 1.0\n" +
+                "\n" +
+                "Contributors:\n" +
+                "\n" +
+                "Lead Developer: Adrian Lock and Robin Yan\n" + //
+                "Supervisor: Ms. Lam\n" +
+                "\n" +
+                "Statistics:\n" +
+                "\n" +
+                "Download Count: Join the growing community of Uno average enjoyer. With 10000+ downloads and counting.\n"
+                +
+                "\n" +
+                "Average Rating: YUNO UNO has received glowing reviews among students, boasting an impressive average rating of 4.99 stars on app stores.\n"
+                +
+                "\n" +
+                "If you encountered any issues and bugs please reach out to adrianyhlock@gmail.com or kitzoyan2@gmail.com\n");
     }
 }
