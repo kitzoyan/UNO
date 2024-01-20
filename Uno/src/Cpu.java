@@ -15,9 +15,10 @@ import java.util.Random;
 import Cards.*;
 
 public class Cpu extends Player {
-    private int difficultly = 4;
+    private int difficulty = 3;
     private boolean calledUno = false;
     private boolean needUno = false;
+    private int focusColourNum = 0; // 0 = red, 1 = yellow, 2 = green, 3 = blue
 
     public Cpu(String name) {
         super(name);
@@ -25,17 +26,21 @@ public class Cpu extends Player {
 
     public Cpu(String name, Deck deck) {
         super(deck, name);
+<<<<<<< HEAD
+=======
+        this.difficulty = difficultly;
+>>>>>>> RevealCards-Robin
     }
 
-    public Cpu(String name, Deck deck, int difficultly, boolean calledUno, boolean needUno) {
+    public Cpu(String name, Deck deck, int difficulty, boolean calledUno, boolean needUno) {
         super(deck, name);
-        this.difficultly = difficultly;
+        this.difficulty = difficulty;
         this.calledUno = calledUno;
         this.needUno = needUno;
     }
 
     public void setDifficulty(int n) {
-        this.difficultly = difficultly;
+        this.difficulty = difficulty;
     }
 
     /**
@@ -46,133 +51,98 @@ public class Cpu extends Player {
      *         transferring the card from deck to deck
      */
     public Card play(Card currentCard, String currentColour, Deck drawDeck) {
-        return playWithNoDifficulty(currentCard, currentColour, drawDeck);
+        return playWithDifficulty(currentCard, currentColour, drawDeck);
     }
 
     /**
-     * Plays a the first instance of a valid card found in its deck. If no valid
-     * cards, draw a card
+     * Plays cards according to a mathematical algorithm of logic. Plays the first
+     * instance of a valid card found in its deck (searching from reverse). If no
+     * valid cards, draw a card.
      * 
-     * @param currentCard
+     * <pre>
+     * Difficulty 1 - If wild card drawn, randomly choose colour
+     * Difficulty 2 - If wild card drawn, choose colour with has most cards
+     * </pre>
+     * 
+     * @param currentCard the current card of the game
+     * @param current     the current colour of the game
      * @param drawDeck
      * @return a card. Return null if no card was played.
      */
-    private Card playWithNoDifficulty(Card currentCard, String currentColour, Deck drawDeck) {
+    private Card playWithDifficulty(Card currentCard, String currentColour, Deck drawDeck) {
+        int red = deck.searchColourCards("red");
+        int yellow = deck.searchColourCards("yellow");
+        int green = deck.searchColourCards("green");
+        int blue = deck.searchColourCards("blue");
+
+        // Focus on a colour that has the most cards
+        if (difficulty > 1) {
+            int highestColour = Math.max(green, (Math.max(red, Math.max(yellow, blue))));
+            focusColourNum = 0;
+            if (yellow == highestColour) {
+                focusColourNum = 1;
+            } else if (green == highestColour) {
+                focusColourNum = 2;
+            } else if (blue == highestColour) {
+                focusColourNum = 3;
+            }
+        } else {
+            focusColourNum = Math.round((float) Math.random() * 3);
+        }
+
+        // Find any valid cards to play, avoiding wild cards
+        Card temp = null;
+        int lastWild = -1;
         for (int i = 0; i < deck.getNumCards(); i++) {
-            // System.out.println("CPU is thinking of plaing... " + currentColour + " " +
-            // deck.getCard(i).getColour());
-            if (deck.getCard(i).isValidMove(currentCard) || deck.getCard(i).getColour().equals(currentColour)) {
-                callUno();
-                return deck.getCard(i);
+            temp = deck.getCard(i);
+            if (temp.isValidMove(currentCard) || temp.getColour().equals(currentColour)) {
+                if (!Uno.getCurrentGame().CpuPanic() && difficulty < 3) {
+                    if (!temp.getColour().equals("black")) {
+                        return temp;
+                    } else {
+                        lastWild = i;
+                    }
+
+                    // If panicking
+                } else {
+                    if (temp.getColour().equals("black")) {
+                        lastWild = i;
+                    }
+                }
+
             }
         }
+
+        // Now for wild cards, last resort, only if not panic
+        if (lastWild != -1) {
+            // If difficulty > 2, play +4 cards strategically over ColourChange
+            if (difficulty > 2) {
+                if (Uno.getCurrentGame().CpuPanic()) {
+                    return deck.getCard(deck.searchSpecificCard("black", "PlusFour"));
+                } else {
+                    return deck.getCard(deck.searchSpecificCard("black", "ColourChange"));
+                }
+            } else {
+                return deck.getCard(lastWild); // Should be wildcard
+            }
+        }
+
+        // Just find any card that works at this point if no wild cards
+        for (int i = 0; i < deck.getNumCards(); i++) {
+            temp = deck.getCard(i);
+            if (temp.isValidMove(currentCard) || temp.getColour().equals(currentColour)) {
+                return temp;
+            }
+        }
+
+        // If there were absolutely no valid cards to play
         Card newDrawn = drawDeck.drawRandom();
         deck.moveCard(drawDeck, newDrawn);
         System.out.println(name + " drew a card");
         if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
-            callUno();
+            // callUno();
             return newDrawn;
         }
-        return null;
-    }
-
-    /**
-     * Plays cards according to a mathematical algorithm of logic. This method is
-     * for future update.
-     * 
-     * @param currentCard
-     * @return
-     * @deprecated
-     */
-    private Card playWithDifficulty(Card currentCard) {
-        if (difficultly > 4)
-
-            if (difficultly == 1) {
-                for (int i = 0; i < deck.getNumCards(); i++) {
-                    if (deck.getCard(i).isValidMove(currentCard)) {
-                        return deck.getCard(i);
-                    }
-                }
-
-            } else if (difficultly == 2) {
-                int yellow = deck.searchColourCards("yellow");
-                int blue = deck.searchColourCards("blue");
-                int red = deck.searchColourCards("red");
-                int green = deck.searchColourCards("green");
-
-                if (red > blue && red > green && red > yellow) {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("red")) {
-                            return deck.getCard(i);
-                        }
-                    }
-                } else if (green > red && green > blue && green > yellow) {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("green")) {
-                            return deck.getCard(i);
-                        }
-                    }
-                } else if (blue > red && blue > green && blue > yellow) {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("blue")) {
-                            return deck.getCard(i);
-                        }
-                    }
-                } else if (yellow > blue && yellow > green && yellow > red) {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("yellow")) {
-                            return deck.getCard(i);
-                        }
-                    }
-                }
-
-                // this will run when there is no valid move for the best color
-                for (int i = 0; i < deck.getNumCards(); i++) {
-                    if (deck.getCard(i).isValidMove(currentCard)) {
-                        return deck.getCard(i);
-                    }
-                }
-
-            } else if (difficultly == 3) {
-                int yellow = deck.searchColourCards("yellow");
-                int blue = deck.searchColourCards("blue");
-                int red = deck.searchColourCards("red");
-                int green = deck.searchColourCards("green");
-
-                if (red > blue && red > green && red > yellow) {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("red")) {
-                            return deck.getCard(i);
-                        }
-                    }
-                } else if (green > red && green > blue && green > yellow) {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("green")) {
-                            return deck.getCard(i);
-                        }
-                    }
-                } else if (blue > red && blue > green && blue > yellow) {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("blue")) {
-                            return deck.getCard(i);
-                        }
-                    }
-                } else if (yellow > blue && yellow > green && yellow > red) {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard) && deck.getCard(i).getColour().equals("yellow")) {
-                            return deck.getCard(i);
-                        }
-                    }
-                } else {
-                    for (int i = 0; i < deck.getNumCards(); i++) {
-                        if (deck.getCard(i).isValidMove(currentCard)) {
-                            return deck.getCard(i);
-                        }
-                    }
-                }
-            }
-
-        // draw card if it reaches
         return null;
     }
 
@@ -180,12 +150,11 @@ public class Cpu extends Player {
      * Has a 50% chance to call UNO
      */
     public void callUno() {
-        // Because the CPU calls uno before their card is removed, so numCards is 2
-        if (deck.getNumCards() > 2) {
+        if (deck.getNumCards() > 1) {
             calledUno = false;
             needUno = false;
             return;
-        } else if (deck.getNumCards() == 2) {
+        } else if (deck.getNumCards() == 1) {
             needUno = true;
             int rand = Math.round((float) Math.random());
             if (rand == 1) {
@@ -203,6 +172,10 @@ public class Cpu extends Player {
 
     public boolean getNeedUno() {
         return needUno;
+    }
+
+    public int getFocusColourNum() {
+        return focusColourNum;
     }
 
 }

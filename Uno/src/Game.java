@@ -27,6 +27,7 @@ import javax.crypto.spec.DESKeySpec;
 public class Game {
     protected String name;
     protected Card currentCard = null;
+    protected Card previousCard = null; // Used only to check if people drew instead of played
     protected String currentColour;
     protected final static int INIT_CARDS = 7;
     protected PlayerManager players;
@@ -148,22 +149,24 @@ public class Game {
         if (!gameSaved) {
             System.out.println("============================================ END");
             System.out.println(players.getCurrentPlayer().getName() + " was the winner. Thanks for playing!");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                System.out.println("SYSTEM: (Game) Thread was interputed");
-            }
+            Uno.wait(3000);
         }
         return;
     }
 
     /**
      * Runs a single turn which:
+     * 
+     * <pre>
      * - applies effects on players from current card
      * - moves to next player
      * - returns a card from the player
+     * - sets the current card
+     * - if drawpile is all used up, substitute discardpile in
+     * </pre>
      * 
-     * @return
+     * @return <code>true</code> if one player has 0 cards left and has won the
+     *         game, or user chose to save game
      */
     private boolean turn() {
         // If all cards used
@@ -172,18 +175,19 @@ public class Game {
             drawPile = discardPile;
             discardPile = new Deck();
         }
-        boolean toSkip = applyCurrentCard();
+
+        // Check if the previous card is the same identity by address as the the
+        // current,
+        // if such, do NOT APPLY the card
+        boolean toSkip = (currentCard == previousCard ? false : applyCurrentCard());
+
         if (toSkip) {
             System.out.println(players.getPlayer(1).getName() + " was skipped");
         }
         players.sortNextPlayer(toSkip);
 
         // Delay the output so players can read
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            System.out.println("SYSTEM: (Game) Thread was interputed");
-        }
+        Uno.wait(2000);
 
         System.out.println(
                 "============================================ "
@@ -193,11 +197,15 @@ public class Game {
         if (gameSaved) {
             return true; // exit the loop if the game is saved
         }
+        previousCard = currentCard;
         setCurrentCard(chosen, players.getCurrentPlayer() instanceof Cpu, players.getCurrentPlayer().getDeck());
         if (chosen == null) {
             System.out.println("Current card: " + currentCard);
         } else {
             System.out.println(players.getCurrentPlayer().getName() + " played: " + currentCard);
+            if (players.getCurrentPlayer() instanceof Cpu) {
+                ((Cpu) players.getCurrentPlayer()).callUno();
+            }
         }
         System.out.println("Current colour: " + currentColour);
         System.out.println("\nCard(s) left: " + players.getCurrentPlayer().getDeck().getNumCards());
@@ -230,7 +238,15 @@ public class Game {
         Card temporary = null;
         do {
             temporary = drawPile.drawRandom();
+            // temporary = drawPile.getCard(drawPile.searchSpecificCard("red", "Reverse"));
         } while (temporary instanceof PlusFour);
+
+        // Because before start, the real 1st player is currently 2nd in list, waiting
+        // to be sorted in run()
+        // Must sort now so when reverse is applied, it changes to 4th instead of 3rd
+        if (temporary instanceof Reverse) {
+            players.sortNextPlayer(false);
+        }
         setCurrentCard(temporary, players.getCurrentPlayer() instanceof Cpu, drawPile);
     }
 
@@ -263,9 +279,10 @@ public class Game {
                     System.out.println("Choose a colour:\n\t1. Red\n\t2. Yellow\n\t3. Green\n\t4. Blue");
                     while (!exit) {
                         try {
-                            System.out.println("[input]: ");
+                            System.out.print("Colour [input]: ");
                             input = Integer.parseInt(sc.nextLine());
                             if (input > 0 && input < 5) {
+                                System.out.println();
                                 exit = true;
                             } else {
                                 throw new NumberFormatException("");
@@ -275,7 +292,7 @@ public class Game {
                         }
                     }
                 } else {
-                    input = Math.round((float) Math.random() * 3 + 1);
+                    input = ((Cpu) players.getCurrentPlayer()).getFocusColourNum() + 1;
                 }
 
                 // Based on the choices
@@ -298,8 +315,9 @@ public class Game {
 
     /**
      * Searches through all CPU players and checks for anyone who needs Uno has not
-     * called it
+     * called it. This method should only be called by Human
      * 
+     * @return <code>true</code> if
      */
     public boolean catchUno() {
         boolean found = false;
@@ -312,7 +330,7 @@ public class Game {
                     // But it was not called
                     if (!c.getCalledUno()) {
                         found = true;
-                        System.out.println(c.getName() + " forgot to call Uno and drew 2");
+                        System.out.println("\n" + c.getName() + " forgot to call Uno and drew 2\n");
                         // Draw 2 random cards as punishment
                         c.getDeck().moveCard(drawPile, drawPile.drawRandom());
                         c.getDeck().moveCard(drawPile, drawPile.drawRandom());
@@ -358,10 +376,25 @@ public class Game {
     }
 
     /**
+<<<<<<< HEAD
      * Translate the text inside the text file into a card
      */
     private Card returnNewCard(String color, String type) {
         return drawPile.getCard(drawPile.searchSpecificCard(color, type));
+=======
+     * Searchs through all players and checks if anyone is approaching 0 cards.
+     * 
+     * @return <code>true</code> if someone is below 4
+     */
+    public boolean CpuPanic() {
+        int minCards = players.getPlayer(1).getDeck().getNumCards();
+        for (int i = 2; i < players.getSetPlayers(); i++) {
+            if (players.getPlayer(i).getDeck().getNumCards() < minCards) {
+                minCards = players.getPlayer(i).getDeck().getNumCards();
+            }
+        }
+        return (minCards < 4);
+>>>>>>> RevealCards-Robin
     }
 
 }

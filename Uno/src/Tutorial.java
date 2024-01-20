@@ -1,3 +1,4 @@
+
 /*=============================================================================
 |  Tutorial.java                                                              |
 |-----------------------------------------------------------------------------|
@@ -11,7 +12,10 @@
 |  draw piles. This game mode is designed for the new players who wish to     |
 |  learn how to play without the need of a real person to help.               |
 |=============================================================================*/
+import java.util.*;
+
 public class Tutorial extends Game {
+    private Scanner sc = new Scanner(System.in);
 
     /**
      * Class Constructor
@@ -44,38 +48,6 @@ public class Tutorial extends Game {
     }
 
     /**
-     * Reveals the hand of the specified player, returns true if found, false if not
-     * exist
-     * 
-     * @param name the specified name to search for
-     * @return a boolean indicating if the player has found
-     */
-    public boolean revealPlayer(String name) {
-        Player temp = players.searchPlayer(name);
-        if (temp != null) {
-            System.out.println(temp.getDeck());
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Reveals the discard pile
-     */
-    public void revealDiscard() {
-        System.out.println("Cards in discard Pile: " + discardPile);
-
-    }
-
-    /**
-     * Reveals the draw pile
-     */
-    public void revealDraw() {
-        System.out.println("Cards in draw Pile: " + drawPile);
-    }
-
-    /**
      * Returns the number of cards in the draw pile and discard pile
      * 
      * @param colour the specified color to search for
@@ -84,6 +56,78 @@ public class Tutorial extends Game {
      */
     public int searchPublicDraw(String colour, String type) { // don't know about the deck
         return drawPile.searchSpecificCard(colour, type) + discardPile.searchSpecificCard(colour, type);
+    }
+
+    /**
+     * Displays the GUI for user interface upon choosing to view all hidden decks.
+     * This method should only be called from Human with TUTORIAL toggled on.
+     * This method gives options to view public decks and other player decks.
+     */
+    public void revealCards() {
+        // System.out.println("\t1. Reveal Cards in Draw Pile\n\t2. Reveal Cards in
+        // Discard Pile\n\t3. Reveal a Player's Deck\n\t4. Return");
+        int input = 0;
+        boolean exit = false;
+        while (!exit) {
+            System.out.println(
+                    "\t1. Reveal Cards in Draw Pile\n\t2. Reveal Cards in Discard Pile\n\t3. Reveal a Player's Deck\n\t4. Return");
+            try {
+                System.out.print("Reveal[input]: ");
+                input = Integer.parseInt(sc.nextLine());
+                if (input == 1) {
+                    System.out.println("============================================ REVEAL DRAW PILE");
+                    System.out.println(drawPile);
+                } else if (input == 2) {
+                    System.out.println("============================================ REVEAL DISCARD PILE");
+                    System.out.println(discardPile);
+                } else if (input == 3) {
+                    revealPlayer();
+                } else if (input == 4) {
+                    exit = true;
+                } else {
+                    throw new NumberFormatException("");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Re-enter a valid option: ");
+            }
+        }
+
+    }
+
+    /**
+     * Prints the specific GUI for choosing to reveal a specific player's deck.
+     * You must know who you want to reveal by name.
+     */
+    private void revealPlayer() {
+        System.out.println("============================================ REVEAL PLAYER");
+        System.out.println("Type in the name of the player you wish to reveal. Type in -1 to go back");
+        String input = null;
+        boolean exit = false;
+        while (!exit) {
+            try {
+                System.out.print("Name [input]: ");
+                input = sc.nextLine();
+                if (Integer.parseInt(input) == -1) {
+                    exit = true;
+                } else {
+                    System.out.println("No name was found. Re-enter a valid option: ");
+                }
+            } catch (NumberFormatException e) { // This time because string input there is no false answer
+                boolean found = false;
+                for (int i = 0; i < players.getSetPlayers(); i++) {
+                    if (players.getPlayer(i).getName().equalsIgnoreCase(input)) {
+                        System.out.println("\n" + players.getPlayer(i).getDeck() + "\n");
+                        found = true;
+                        exit = true;
+                    }
+                }
+                if (!found) {
+                    System.out.println("No name was found. Re-enter a valid option: ");
+
+                }
+            }
+        }
+
     }
 
     public String gameType() {
