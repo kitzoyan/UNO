@@ -3,13 +3,14 @@
 |  Cpu.java                                                                   |
 |-----------------------------------------------------------------------------|
 |  Programmer:  Adrian Lock and Robin Yan                                     |
-|  Last Modified:   Jan 18, 2024                                              |
+|  Last Modified:   Jan 19, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
 |  This class is the child class of the Player class. This class contains all |
 |  the logic for a Cpu to operate. With the difficulty level, we can select   |
 |  the amount of logic statements to turn on, increasing or decreasing the    |
-|  level of “intelligence”. The Cpu has a 50% chance to call Uno.             |
+|  level of “intelligence” when it plays cards. The Cpu has a 50% chance to   |
+|  call Uno.                                                                  |
 |=============================================================================*/
 import java.util.Random;
 import Cards.*;
@@ -20,16 +21,39 @@ public class Cpu extends Player {
     private boolean needUno = false;
     private int focusColourNum = 0; // 0 = red, 1 = yellow, 2 = green, 3 = blue
 
+    /**
+     * Creates a new Cpu with name and difficulty level with an empty deck
+     * 
+     * @param name
+     * @param difficulty
+     */
     public Cpu(String name, int difficulty) {
         super(name);
         this.difficulty = difficulty;
     }
 
+    /**
+     * Creates a new Cpu with a name, difficulty, and preset deck
+     * 
+     * @param name
+     * @param deck
+     * @param difficulty
+     */
     public Cpu(String name, Deck deck, int difficulty) {
         super(deck, name);
         this.difficulty = difficulty;
     }
 
+    /**
+     * Creates a new Cpu based off of the following parameters. This should be used
+     * when loading game.
+     * 
+     * @param name       the name of Cpu
+     * @param deck       the preset deck for the Cpu
+     * @param difficulty the difficulty level
+     * @param calledUno  if the Cpu called Uno
+     * @param needUno    if the Cpu needs to call Uno
+     */
     public Cpu(String name, Deck deck, int difficulty, boolean calledUno, boolean needUno) {
         super(deck, name);
         this.difficulty = difficulty;
@@ -46,24 +70,28 @@ public class Cpu extends Player {
     }
 
     /**
-     * This method will decide which card the CPU will play according to the
-     * difficulty, assume Game wil call uno for the cpu
+     * Decides which card the CPU will play according to the difficulty. Assume
+     * Game will callUno for the cpu
      * 
-     * @return the Card that is valid to play, this method assumes game will be one
-     *         transferring the card from deck to deck
+     * @param currentCard   the current card (previous card) played
+     * @param currentColour the current colour of the game
+     * @param drawDeck      the public draw pile
+     * @return a Card that is valid to play. This method assumes Game will be one
+     *         transferring the card from player deck to discard pile. Returns null
+     *         if CPU drew a card and did not play any.
      */
     public Card play(Card currentCard, String currentColour, Deck drawDeck) {
         return playWithDifficulty(currentCard, currentColour, drawDeck);
     }
 
     /**
-     * Plays cards according to a mathematical algorithm of logic. Plays the first
-     * instance of a valid card found in its deck (searching from reverse). If no
-     * valid cards, draw a card.
+     * Determines the right choice for cards according to a mathematical algorithm
+     * of logic.
      * 
      * <pre>
-     * Difficulty 1 - If wild card drawn, randomly choose colour
-     * Difficulty 2 - If wild card drawn, choose colour with has most cards
+     * Difficulty 1 - Play the first instance of a valid card. If wild card drawn, randomly choose colour
+     * Difficulty 2 - Same with above, but choose colour for wild card based on colour set containg the most cards
+     * Difficulty 3 - If others players approach "Uno," Cpu will prioritize using wild cards (+4 if owned) to prevent others from winning
      * </pre>
      * 
      * @param currentCard the current card of the game
@@ -98,37 +126,24 @@ public class Cpu extends Player {
         for (int i = 0; i < deck.getNumCards(); i++) {
             temp = deck.getCard(i);
             if (temp.isValidMove(currentCard) || temp.getColour().equals(currentColour)) {
-                if (!Uno.getCurrentGame().CpuPanic() && difficulty < 3) {
+
+                // If the cpu is difficulty 3 is not panicing
+                if ((!Uno.getCurrentGame().CpuPanic() && difficulty > 2) || difficulty < 3) {
                     if (!temp.getColour().equals("black")) {
                         return temp;
                     } else {
                         lastWild = i;
                     }
-
-                    // If panicking
+                    // If the Cpu is difficulty 3 and is panicing
                 } else {
-                    if (temp.getColour().equals("black")) {
-                        lastWild = i;
-                    }
+                    lastWild = i;
                 }
-
             }
         }
-
-        // Now for wild cards, last resort, only if not panic
+        // Wild cards are last resort except during panic for CPU > 2
         if (lastWild != -1) {
-            // If difficulty > 2, play +4 cards strategically over ColourChange
-            if (difficulty > 2) {
-                if (Uno.getCurrentGame().CpuPanic()) {
-                    return deck.getCard(deck.searchSpecificCard("black", "PlusFour"));
-                } else {
-                    return deck.getCard(deck.searchSpecificCard("black", "ColourChange"));
-                }
-            } else {
-                return deck.getCard(lastWild); // Should be wildcard
-            }
+            return deck.getCard(lastWild); // Play the last wild card(usually +4)
         }
-
         // Just find any card that works at this point if no wild cards
         for (int i = 0; i < deck.getNumCards(); i++) {
             temp = deck.getCard(i);
@@ -136,20 +151,19 @@ public class Cpu extends Player {
                 return temp;
             }
         }
-
         // If there were absolutely no valid cards to play
         Card newDrawn = drawDeck.drawRandom();
         deck.moveCard(drawDeck, newDrawn);
         System.out.println(name + " drew a card");
         if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
-            // callUno();
             return newDrawn;
         }
         return null;
     }
 
     /**
-     * Has a 50% chance to call UNO
+     * Determines whether CPU will call Uno if they have 1 card left. There is a 50%
+     * chance to call UNO, meaning if they don't they are punishable.
      */
     public void callUno() {
         if (deck.getNumCards() > 1) {

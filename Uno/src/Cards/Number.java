@@ -3,7 +3,7 @@ package Cards;
 |  Number.java                                                                |
 |-----------------------------------------------------------------------------|
 |  Programmer:  Adrian Lock and Robin Yan                                     |
-|  Last Modified:   Jan 18, 2024                                              |
+|  Last Modified:   Jan 19, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
 |  This class extends from the class Card. All the cards that are numbers fall|
@@ -16,6 +16,12 @@ public class Number extends Card {
     private static final int DRAW = 0;
     private int number;
 
+    /**
+     * Creates a new Number Card
+     * 
+     * @param colour
+     * @param number
+     */
     public Number(String colour, int number) {
         super(colour);
         this.number = number;
@@ -38,6 +44,7 @@ public class Number extends Card {
     }
 
     /**
+     * @param other the explicit card that the implicit is being played on top of
      * @return <code>true</code> if the implicit card has the same number,
      *         or the same colour as the previous card
      */
@@ -57,6 +64,10 @@ public class Number extends Card {
         return super.toString() + number;
     }
 
+    /**
+     * @param other the card being compared
+     * @return <code>true</code> if the both cards are the same colour and number
+     */
     public boolean equals(Card other) {
         if (other == null) {
             return false;

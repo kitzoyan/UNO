@@ -522,7 +522,7 @@ public class Uno {
     private static void programDescription() {
         System.out.println("\n" +
                 "Title: YUNO UNO\n" +
-                "Version: 1.0\n" +
+                "Version: Beta 1.1\n" +
                 "\n" +
                 "Contributors:\n" +
                 "\n" +
