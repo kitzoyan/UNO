@@ -166,15 +166,21 @@ public class PlayerManager {
         return players[0];
     }
 
+    /**
+     * Binary searches the default list
+     * 
+     * @param name
+     * @return a player found. Return null if not found.
+     */
     public Player searchPlayer(String name) {
         int bottom = 0, top = SET_PLAYERS - 1, index = -1, middle;
         boolean found = false;
-        while (players[bottom].getName().compareTo(players[top].getName()) <= 0 && !found) {
+        while (defaultList[bottom].getName().compareTo(defaultList[top].getName()) <= 0 && !found) {
             middle = (bottom + top) / 2;
-            if (name.equals(players[middle].getName())) {
+            if (name.equals(defaultList[middle].getName())) {
                 found = true;
-                return players[middle];
-            } else if (name.compareTo(players[middle].getName()) > 0) {
+                return defaultList[middle];
+            } else if (name.compareTo(defaultList[middle].getName()) > 0) {
                 bottom = middle + 1;
             } else {
                 top = middle - 1;
