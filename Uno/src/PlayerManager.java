@@ -167,10 +167,11 @@ public class PlayerManager {
     }
 
     /**
-     * Binary searches the default list
+     * Searches the player using the specified name, this game uses binary search
+     * to search player using the name
      * 
      * @param name
-     * @return a player found. Return null if not found.
+     * @return
      */
     public Player searchPlayer(String name) {
         int bottom = 0, top = SET_PLAYERS - 1, index = -1, middle;

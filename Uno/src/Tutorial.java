@@ -131,6 +131,9 @@ public class Tutorial extends Game {
 
     }
 
+    /**
+     * Returns the game type for saving the game file
+     */
     public String gameType() {
         return "tutorial";
     }

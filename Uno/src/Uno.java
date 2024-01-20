@@ -198,6 +198,10 @@ public class Uno {
         }
     }
 
+    /**
+     * Saves game by writing the current date, game name, current color, current
+     * card, discard pile's deck and all players deck
+     */
     public static void saveGame() {
         // generate the current date
         Date currentDate = new Date();
@@ -390,6 +394,12 @@ public class Uno {
         }
     }
 
+    /**
+     * This will determine if the gameslot is a tutorial or not and set the current
+     * game to a new specified game object
+     * 
+     * @param fileName a String representing the name of the slot file
+     */
     private static void createGameObject(String fileName) {
         if (isTutorial(fileName)) {
             currentGame = new Tutorial(fileName, fullDeck);

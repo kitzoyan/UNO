@@ -74,7 +74,8 @@ public class Game {
     }
 
     /**
-     * Loads a game from a txt file and resumes it
+     * Class Constructor
+     * Creates the game object using the full deck and game file
      * 
      * @param gameFile
      * @param fullDeck
@@ -178,7 +179,7 @@ public class Game {
      * - if drawpile is all used up, substitute discardpile in
      * </pre>
      * 
-     * @return <code>true</code> if one player has 0 cards left and has won the
+     * @return returns true if one player has 0 cards left and has won the
      *         game, or user chose to save game
      */
     private boolean turn() {
@@ -230,7 +231,7 @@ public class Game {
     /**
      * Applies effects of the current card on the player order or upcoming player
      * 
-     * @return <code>true</code> if the current cart will skip the next player;
+     * @return returns true if the current cart will skip the next player;
      */
     private boolean applyCurrentCard() {
         if (currentCard instanceof PlusFour) {
@@ -330,7 +331,7 @@ public class Game {
      * Searches through all CPU players and checks for anyone who needs Uno has not
      * called it. This method should only be called by Human
      * 
-     * @return <code>true</code> if
+     * @return a boolean indicates if the cpu need uno
      */
     public boolean catchUno() {
         boolean found = false;
@@ -395,10 +396,10 @@ public class Game {
         return drawPile.getCard(drawPile.searchSpecificCard(color, type));
     }
 
-    /*
-     * Searchs through all players and checks if anyone is approaching 0 cards.
+    /**
+     * Searches through all players and checks if anyone is approaching 0 cards.
      * 
-     * @return <code>true</code> if someone is below 4
+     * @return return true if someone has a card below 4
      */
     public boolean CpuPanic() {
         int minCards = players.getPlayer(1).getDeck().getNumCards();
