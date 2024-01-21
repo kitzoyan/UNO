@@ -1,6 +1,7 @@
-4
+5
 Everyone will start with 7 cards in their hands
-In every round, you can only play cards that are the same colour or the same number with the card on top of the discard pile. Otherwise, you will need to draw a card.
+In every round, you can only play cards that are the same colour or the same number with the card on top of the discard pile. 
+Otherwise, you will need to draw a card.
 The first person who has no cards wins the game.
 Remember to call out UNO! If you have the last card.
 

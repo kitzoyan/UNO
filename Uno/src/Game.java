@@ -83,6 +83,7 @@ public class Game {
     public Game(String gameFile, Deck fullDeck) {
         String input, color, type, player;
         int difficulty = 3;
+        boolean needUno, calledUno;
         String[] names = new String[4];
         Deck[] decks = new Deck[4];
         int[] order = new int[4];
@@ -95,9 +96,9 @@ public class Game {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(gameFile));
             input = reader.readLine();
-            while (!input.equals("")) { // skip the date and the game name
-                input = reader.readLine();
-            }
+            name = reader.readLine();
+
+            reader.readLine(); // skip the empty line
             reader.readLine(); // skip the game mode line
 
             color = reader.readLine();
@@ -116,10 +117,16 @@ public class Game {
             }
 
             for (int i = 0; i < 4; i++) {
+                needUno = false;
+                calledUno = false;
                 names[i] = reader.readLine();
                 player = reader.readLine();
                 if (player.equals("cpu")) {
                     difficulty = Integer.parseInt(reader.readLine());
+                    if (reader.readLine().equals("true"))
+                        needUno = true;
+                    if (reader.readLine().equals("true"))
+                        calledUno = true;
                 }
                 order[i] = Integer.parseInt(reader.readLine());
                 input = reader.readLine();
@@ -133,7 +140,7 @@ public class Game {
                 if (player.equals("human")) {
                     temp[i] = new Human(names[i], decks[i]);
                 } else {
-                    temp[i] = new Cpu(names[i], decks[i], difficulty);
+                    temp[i] = new Cpu(names[i], decks[i], difficulty, calledUno, needUno);
 
                 }
             }

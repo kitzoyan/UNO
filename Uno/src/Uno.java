@@ -24,7 +24,6 @@
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import Cards.*;
@@ -40,6 +39,7 @@ public class Uno {
     private static Deck fullDeck;
     private static String gameRules = "GameRules:";
     private static Game currentGame;
+    private static String currentSlot = null;
 
     /**
      * Runs the main loop allowing user to create game, delete game and loading a
@@ -58,8 +58,8 @@ public class Uno {
             System.out.println("Slot #3 " + checkGame(SLOT3FILE) + "\n");
             System.out.println(
                     "\t1. Create a new Game\n" + "\t2. Continue a game\n" + "\t3. Delete a game\n"
-                            + "\t4. Program Details\n" + "\t5. Close Game");
-            input = verifyInput(5); // make sure the input is within 4
+                            + "\t4. Program Details\n" + "\t5. How to play\n" + "\t6. Close Game");
+            input = verifyInput(6); // make sure the input is within 4
             if (input == 1) { // create a game
                 if (emptySlot() != null) {
                     createGame(); // will create the game and run it
@@ -77,6 +77,8 @@ public class Uno {
             } else if (input == 4) {
                 programDescription();
             } else if (input == 5) {
+                printRules();
+            } else if (input == 6) {
                 exit = true;
             }
         }
@@ -147,14 +149,17 @@ public class Uno {
             input = verifyInput(4);
             if (input == 1 && !isEmpty(1)) {
                 createGameObject(SLOT1FILE);
+                currentSlot = SLOT1FILE;
                 currentGame.run();
                 exit = true;
             } else if (input == 2 && !isEmpty(2)) {
                 createGameObject(SLOT2FILE);
+                currentSlot = SLOT2FILE;
                 currentGame.run();
                 exit = true;
             } else if (input == 3 && !isEmpty(3)) {
                 createGameObject(SLOT2FILE);
+                currentSlot = SLOT3FILE;
                 currentGame.run();
                 exit = true;
             } else if (input == 4) {
@@ -196,7 +201,6 @@ public class Uno {
                 exit = true; // go back to the main menu
             } else {
                 System.out.println("The game slot you entered is empty");
-                wait(2000);
             }
 
         }
@@ -210,6 +214,8 @@ public class Uno {
     public static void saveGame() {
         // generate the current date
         Date currentDate = new Date();
+        BufferedWriter writer;
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String currentDateTime = dateFormat.format(currentDate);
 
@@ -220,7 +226,11 @@ public class Uno {
         Deck discardPile = currentGame.getDiscardPile();
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(emptySlot()));
+            if (currentSlot != null) { // if the game is resumed, it will save to the old slot
+                writer = new BufferedWriter(new FileWriter(currentSlot));
+            } else {
+                writer = new BufferedWriter(new FileWriter(emptySlot()));
+            }
             writer.write(currentDateTime + "\n");
             writer.write(currentGame.getName() + "\n\n");
             if (currentGame instanceof Tutorial) {
@@ -254,6 +264,9 @@ public class Uno {
                     writer.write("\ncpu\n");
                     difficulty = ((Cpu) temp).getDifficulty();
                     writer.write("" + difficulty);
+                    writer.write("\n" + ((Cpu) temp).getNeedUno());
+                    writer.write("\n" + ((Cpu) temp).getCalledUno());
+
                 }
                 writer.write("\n" + i + "\n");
                 for (int j = 0; j < deck.getNumCards(); j++) {
@@ -335,7 +348,7 @@ public class Uno {
 
             input = reader.readLine();
             for (int i = 0; i < Integer.parseInt(input); i++) {
-                gameRules = gameRules + "\n" + reader.readLine();
+                gameRules = gameRules + "\n\t" + (i + 1) + ". " + reader.readLine();
             }
             reader.readLine();
             input = reader.readLine();
@@ -400,6 +413,7 @@ public class Uno {
      * @param fileName a String representing the name of the slot file
      */
     private static void createGameObject(String fileName) {
+        currentSlot = null;
         if (isTutorial(fileName)) {
             currentGame = new Tutorial(fileName, fullDeck);
         } else {
@@ -561,5 +575,15 @@ public class Uno {
         } catch (InterruptedException e) {
             System.out.println("SYSTEM: (Game) Thread was interputed");
         }
+    }
+
+    /**
+     * Print out the basic game rules of uno
+     */
+    private static void printRules() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(gameRules);
+        System.out.print("Press enter to continue");
+        sc.nextLine();
     }
 }
