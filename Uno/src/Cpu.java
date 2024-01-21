@@ -3,7 +3,7 @@
 |  Cpu.java                                                                   |
 |-----------------------------------------------------------------------------|
 |  Programmer:  Adrian Lock and Robin Yan                                     |
-|  Last Modified:   Jan 19, 2024                                              |
+|  Last Modified:   Jan 21, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
 |  This class is the child class of the Player class. This class contains all |
@@ -33,7 +33,7 @@ public class Cpu extends Player {
     }
 
     /**
-     * Creates a new Cpu with a name, difficulty, and preset deck
+     * Creates a new Cpu with a name, difficulty, and pre-set deck
      * 
      * @param name
      * @param deck
@@ -62,7 +62,7 @@ public class Cpu extends Player {
     }
 
     public void setDifficulty(int n) {
-        this.difficulty = difficulty;
+        difficulty = n;
     }
 
     public int getDifficulty() {
@@ -71,7 +71,7 @@ public class Cpu extends Player {
 
     /**
      * Decides which card the CPU will play according to the difficulty. Assume
-     * Game will callUno for the cpu
+     * Game will callUno() for the cpu.
      * 
      * @param currentCard   the current card (previous card) played
      * @param currentColour the current colour of the game
@@ -85,13 +85,13 @@ public class Cpu extends Player {
     }
 
     /**
-     * Determines the right choice for cards according to a mathematical algorithm
-     * of logic.
+     * Determines the right choice for choosing cards according to a logic
+     * algorithm.
      * 
      * <pre>
-     * Difficulty 1 - Play the first instance of a valid card. If wild card drawn, randomly choose colour
-     * Difficulty 2 - Same with above, but choose colour for wild card based on colour set containg the most cards
-     * Difficulty 3 - If others players approach "Uno," Cpu will prioritize using wild cards (+4 if owned) to prevent others from winning
+     * Difficulty 1 - Play the first instance of a valid card. If wild card played, randomly choose colour
+     * Difficulty 2 - Same with above, but choose colour for wild card based on the colour group containg the most cards
+     * Difficulty 3 - If the next player is about to win, even if there are other valid cards to play, Cpu will prioritize using wild cards (+4 if owned) to prevent them from winning
      * </pre>
      * 
      * @param currentCard the current card of the game
@@ -120,7 +120,7 @@ public class Cpu extends Player {
             focusColourNum = Math.round((float) Math.random() * 3);
         }
 
-        // Find any valid cards to play, avoiding wild cards
+        // Find any valid cards to play, avoiding wild cards at first
         Card temp = null;
         int lastWild = -1;
         for (int i = 0; i < deck.getNumCards(); i++) {
@@ -140,6 +140,7 @@ public class Cpu extends Player {
                 }
             }
         }
+
         // Wild cards are last resort except during panic for CPU > 2
         if (lastWild != -1) {
             if (difficulty > 2) {
@@ -153,13 +154,15 @@ public class Cpu extends Player {
                 return deck.getCard(0); // Play the first wild card(usually CC)
             }
         }
-        // Just find any card that works at this point if no wild cards
+
+        // Just find any card that works at this point if no wild cards are available
         for (int i = 0; i < deck.getNumCards(); i++) {
             temp = deck.getCard(i);
             if (temp.isValidMove(currentCard) || temp.getColour().equals(currentColour)) {
                 return temp;
             }
         }
+
         // If there were absolutely no valid cards to play
         Card newDrawn = drawDeck.drawRandom();
         deck.moveCard(drawDeck, newDrawn);

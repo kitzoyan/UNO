@@ -3,12 +3,12 @@
 |  Human.java                                                                 |
 |-----------------------------------------------------------------------------|
 |  Programmer:  Adrian Lock and Robin Yan                                     |
-|  Last Modified:   Jan 18, 2024                                              |
+|  Last Modified:   Jan 21, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
-|  This class is the child class of the Player class. This is a class contains|
-|  all the methods that require for a player, including the player interface. |
-|  This class has two modes, tutorial and normal.                             |
+|  This class is the child class of the Player class. This class contains all |
+|  the methods required for a player, including the play() interface.         |
+|  A Human Player keeps track of whether they are in tutorial mode or not.    |
 |=============================================================================*/
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -28,12 +28,11 @@ public class Human extends Player {
     }
 
     /**
-     * Make a new Human player. This constructor assumes that whoever calls it must
-     * already have a pre made deck.
+     * Makes a new Human player. This constructor assumes that whoever calls it must
+     * already have a pre-made deck.
      * 
-     * @param name
-     * @param d            the deck being passed in
-     * @param tutorialMode
+     * @param name the name of the player
+     * @param d    the deck being passed in
      */
     public Human(String name, Deck d) {
         super(d, name);
@@ -47,22 +46,19 @@ public class Human extends Player {
     }
 
     /**
-     * Runs the menu GUI and the user selection logic when it's their turn
+     * Displays the menu interface for the Human Player's turn and runs other
+     * methods based on the users selection
      * 
-     * @param currentCard the last card played into the game
-     * @param drawDeck    the public draw Deck
+     * @param currentCard   the last card played into the game
+     * @param currentColour the current colour of the game
+     * @param drawDeck      the public draw Deck
      * @return a card the user chose. Returns null if no card was played.
      */
     public Card play(Card currentCard, String currentColour, Deck drawDeck) {
         Scanner sc = new Scanner(System.in);
         int input = 0;
         deck.superSort();
-        // System.out.println(deck.getNumCards());
-
-        // Print your choices
         String reveal = (tutorialMode ? "\t4. Reveal Cards\n" : "");
-        // System.out.printf("\t1. Attempt to Call Uno\n\t2. Play\n\t3. Quit and Save
-        // Game\n%s", reveal);
         boolean exit = false;
         Card chosen = null;
 
@@ -87,10 +83,8 @@ public class Human extends Player {
                     Uno.saveGame();
                     Uno.getCurrentGame().toggleGameSaved();
                     exit = true;
-                    // Call game from static uno
                 } else if (input == 4 && tutorialMode) { // Reveal cards
                     ((Tutorial) Uno.getCurrentGame()).revealCards();
-                    // Call game from static uno
                 } else {
                     throw new NumberFormatException("");
                 }
@@ -100,9 +94,7 @@ public class Human extends Player {
             }
         }
 
-        if (chosen == null) {
-            // System.out.println("You drew a card.");
-        } else {
+        if (chosen != null) {
             if (deck.getNumCards() == 2) {
                 System.out.println("You called Uno");
             }
@@ -113,11 +105,13 @@ public class Human extends Player {
     }
 
     /**
-     * Displays the GUI for card selection
+     * Displays the interface and runs logic for card selection
      * 
-     * @param sc       the Scanner being used in the class
-     * @param drawDeck the public draw Deck
-     * @return a card chose. Return null if no card played: card was drawn.
+     * @param sc            the Scanner being used in the play() method
+     * @param currentCard
+     * @param currentColour
+     * @param drawDeck      the public draw Deck
+     * @return a card the user chose. Return null if no card played: card was drawn.
      */
     private Card selectCards(Scanner sc, Card currentCard, String currentColour, Deck drawDeck) {
         int input = 0;
@@ -129,7 +123,6 @@ public class Human extends Player {
             System.out.printf("\t%d. " + deck.getCard(numChoices - 2) + "\n", numChoices);
             numChoices++;
         }
-        // System.out.println(numChoices);
 
         // Run user card selection loop
         boolean exit = false;
@@ -139,9 +132,8 @@ public class Human extends Player {
                 input = Integer.parseInt(sc.nextLine());
                 if (input > 1 && input < numChoices) {
                     Card chosen = deck.getCard(input - 2);
-                    // System.out.println(chosen.getColour().equals(currentColour));
-                    // System.out.println(chosen.getColour());
-                    // System.out.println(currentColour);
+
+                    // If you choose to play, or if you choose to read the card's definition
                     if (!printDefinition(sc, chosen)) {
 
                         // If you choose to use this card, and it's valid, play it. Otherwise, try again
@@ -155,13 +147,13 @@ public class Human extends Player {
                     } else {
                         System.out.println("Enter another card to play");
                     }
+                    // Draw a new card, return null if the new card is unplayable
                 } else if (input == 1) {
                     return drawCardFromPile(sc, currentCard, currentColour, drawDeck);
                 } else {
                     throw new NumberFormatException("");
                 }
             } catch (NumberFormatException e) {
-                // System.out.println(e);
                 System.out.println("Re-enter a valid option");
             }
         }
@@ -172,9 +164,9 @@ public class Human extends Player {
 
     /**
      * Displays the choices to either explain the card or play the card upon
-     * selecting a given card
+     * selecting a card
      * 
-     * @param sc     the Scanner of the class
+     * @param sc     the Scanner of the play() method
      * @param toKnow the Card in question
      * @return <code>true</code> if the user chose explain instead of use
      */
@@ -190,7 +182,6 @@ public class Human extends Player {
                 input = Integer.parseInt(sc.nextLine());
                 if (input == 1) {
                     System.out.println(toKnow.getDefinition());
-                    // System.out.println("Select another card");
                     return true;
                 } else if (input == 2) {
                     exit = true;
@@ -208,16 +199,18 @@ public class Human extends Player {
      * Draws a random Card from the public draw pile upon the user's request.
      * 
      * @param sc
-     * @param drawDeck
      * @param currentCard
+     * @param currentColour
+     * @param drawDeck
      * @return a Card only if it can be played. If the card cannot be played, null
-     *         be returned
+     *         is returned.
      */
     private Card drawCardFromPile(Scanner sc, Card currentCard, String currentColour, Deck drawDeck) {
         Card newDrawn = drawDeck.drawRandom();
         System.out.println("You drew: " + newDrawn);
         deck.moveCard(drawDeck, newDrawn);
         Uno.wait(1000);
+
         if (newDrawn.isValidMove(currentCard) || newDrawn.getColour().equals(currentColour)) {
             System.out.println("This card is valid to play. Do you wish to play it?\n\t1. Yes\n\t2. No");
             boolean exit = false;

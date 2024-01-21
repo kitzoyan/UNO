@@ -3,7 +3,7 @@
 |  Player.java                                                                |
 |-----------------------------------------------------------------------------|
 |  Programmer:  Adrian Lock and Robin Yan                                     |
-|  Last Modified:   Jan 18, 2024                                              |
+|  Last Modified:   Jan 21, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
 |  This class is the parent class of Cpu and Human class. This is an abstract |
@@ -17,8 +17,7 @@ public abstract class Player {
     protected Deck deck;
 
     /**
-     * Class Constructor
-     * This class create a new player with the name and new deck
+     * Creates a new player with a name and a default empty deck
      * 
      * @param name a String representing the name of the player
      */
@@ -28,9 +27,10 @@ public abstract class Player {
     }
 
     /**
-     * Class Constructor
-     * This class load a player with the given name and new deck
+     * Creates a new player with a name and a pre-set deck.
+     * This method should be used to resume a player in a saved game.
      * 
+     * @param deck the pre-set deck
      * @param name a String representing the name of the player
      */
     public Player(Deck deck, String name) {

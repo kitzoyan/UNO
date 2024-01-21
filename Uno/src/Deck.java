@@ -3,7 +3,7 @@
 |  Deck.java                                                                  |
 |-----------------------------------------------------------------------------|
 |  Programmer:  Adrian Lock and Robin Yan                                     |
-|  Last Modified:   Jan 18, 2024                                              |
+|  Last Modified:   Jan 21, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
 |  This class is the manager of the card objects. This class has a maximum of |
@@ -20,7 +20,8 @@ public class Deck {
     private Card[] cards;
 
     /**
-     * Create a new deck object using a file
+     * Creates a new deck object using a file. This constructor should only be used
+     * when loading the full Deck in Uno
      * 
      * @param file the file name in String
      */
@@ -42,7 +43,7 @@ public class Deck {
     }
 
     /**
-     * Create an empty deck
+     * Creates an empty deck
      */
     public Deck() {
         numCards = 0;
@@ -50,8 +51,10 @@ public class Deck {
     }
 
     /**
-     * Create a new deck by replicating an identical list of the original. All cards
-     * still point to the same objects.
+     * Creates a new deck by replicating an identical list of the original. All
+     * cards
+     * still point to the same objects, but do not necessarily need to be in same
+     * order.
      * 
      * @param other the explicit deck
      */
@@ -64,10 +67,11 @@ public class Deck {
     }
 
     /**
-     * Generates a a new deck given the file to read from and range to read. This
-     * should be called upon loading old decks. When the file reads the deck, it
-     * will
-     * find a matching Card from the already made fullDeck and copy it to this deck.
+     * Generates a new deck given the file to read from and the range to read in.
+     * This should be called upon loading old decks. When the file reads the deck,
+     * it
+     * will find a matching Card from the already made fullDeck (in Uno) and copy it
+     * to this deck.
      * 
      * @param fileSlot the file to read from containg game information
      * @param start    the starting line of the deck
@@ -76,8 +80,8 @@ public class Deck {
      *                 4)
      * @param fullDeck the fullDeck from Uno
      * 
-     * @deprecated this method may not actually be used. Game class may be the one
-     *             making and assigning decks.
+     * @deprecated this method may not actually be used. In actuality, the Game
+     *             class may be the one making and assigning decks.
      */
     public Deck(String fileSlot, int start, int end, Deck fullDeck) {
         cards = new Card[MAX_CARDS];
@@ -112,11 +116,10 @@ public class Deck {
      * 
      * @param colour
      * @param type   a single capital letter String or class name represeting the
-     *               type.
-     *               (T = PlusTwo, F = PlusFour, C = ColourChange, R = Reverse, S =
-     *               Skip, a whole number = Number)
-     *               To create a Number card, input the digit instead of "N."
-     * @return a card of identical attributes
+     *               type. (T = PlusTwo, F = PlusFour, C = ColourChange, R =
+     *               Reverse, S = Skip, a whole number = Number)
+     *               To create a Number card, input the digit instead of "N".
+     * @return a new card of identical attributes
      */
     private Card makeNewCard(String colour, String type) {
         Card c = null;
@@ -139,45 +142,48 @@ public class Deck {
                     c = new Skip(colour);
                 }
             }
-
         }
-        // System.out.println(colour + " " + type);
         return c;
     }
 
     /**
-     * Transfer a card from the explicit deck to the implicit deck
+     * Transfers a card from the explicit deck to the implicit deck. This removes
+     * the card from the explicit and adds it to the implicit.
      * 
-     * @param donor    the deck giving the card
-     * @param fromThis the card coming from the other deck
+     * @param donor     the deck giving the card
+     * @param fromDonor the card coming from the other deck
      * @return <code>true</code> if the transfer was successful. Unsuccessful when
-     *         the reciever deck is max sized, or donor deck has size of 0
+     *         the reciever deck is max sized, or the donor deck is empty.
      */
-    public boolean moveCard(Deck donor, Card fromThis) {
+    public boolean moveCard(Deck donor, Card fromDonor) {
         if (numCards == MAX_CARDS || donor.isEmpty()) {
-            // String system = (numCards == MAX_CARDS ? "1" : " 2");
-            // System.out.println("SYSTEM: (Deck) unsuccessful transfer1 " + system);
             return false;
         }
-        int index = donor.searchSpecificCard(fromThis);
+
+        // Search for the index of the card
+        int index = donor.searchSpecificCard(fromDonor);
         if (index == -1) {
             return false;
         }
+
+        // Attempt to remove the SPECIFIC card from the donor deck and add it to this
         Card removed = donor.removeCard(index);
         boolean successful = addCard(removed);
+
+        // If it was not successful, undo
         if (!successful) {
-            // System.out.println("SYSTEM: (Deck) unsuccessful transfer2");
             removeCard(searchSpecificCard(removed));
             donor.addCard(removed);
         }
-        superSort();
+        superSort(); // Sort the deck of both
         donor.superSort();
         return successful;
 
     }
 
     /**
-     * Return the index of the first instance of the specified card in the deck
+     * Returns the index of the first instance of a Card in the deck which matches
+     * the specified card
      * 
      * @param c the card being searched for
      * @return the int index. Return -1 if not found.
@@ -192,8 +198,8 @@ public class Deck {
     }
 
     /**
-     * Searches and returns the index of the first card that match the given colour
-     * and type.
+     * Searches and returns the index of the first card that matches the given
+     * colour and type.
      * 
      * @param colour a String colour with first character lowercase
      * @param type   a String of the actual class name. If an whole number, searches
@@ -201,13 +207,14 @@ public class Deck {
      *         found.
      */
     public int searchSpecificCard(String colour, String type) {
+        // Make a substitute temporary card to compare with
         Card temporary = makeNewCard(colour, type);
-        // System.out.println(temporary);
+        // Compare cards in deck to see if they match
         return searchSpecificCard(temporary);
     }
 
     /**
-     * Add a card to the end of the list
+     * Add a card to the end of the deck
      * 
      * @param c the card to be added
      * @return <code>true</code> if the transfer was successful.
@@ -240,8 +247,9 @@ public class Deck {
     }
 
     /**
-     * Finds a null (empty) card inside the list and move the card at the end of the
-     * list to the vacant space
+     * Finds a null (empty) card inside the list and moves it to the end of the
+     * list. This is to make sure that all cards in range -1 < x < numCards are real
+     * cards and not null. This is requried for sorting and searching.
      */
     private void sortNull() {
         for (int i = 0; i < numCards; i++) {
@@ -265,15 +273,14 @@ public class Deck {
         if (random < 0) {
             random = 0;
         }
-        // System.out.println(random);
         Card c = cards[random];
-        // removeCard(random); // Should not be removing it
         return c;
     }
 
     /**
-     * Sorts the deck by colour then type in each colour and ascending order for
-     * Number cards
+     * Sorts the deck by type, then in ascending order for all Number Cards, then by
+     * colour. This method uses a combination of three 1-conditioned sorting
+     * methods, and ultimately sorts the deck using 3-conditions.
      */
     public void superSort() {
         if (isEmpty()) {
@@ -286,9 +293,9 @@ public class Deck {
     }
 
     /**
-     * Locates the beginning and end indexes of the list and sorts all numbers in
-     * ascending order, despite colour. This sort uses selectio sort, and assumes
-     * the list has already been type-sorted.
+     * Locates the beginning and end indexes of the all Number Cards within the list
+     * and sorts all numbers in ascending order, disregarding colour. This sort uses
+     * selectio sort, and assumes the list has already been type-sorted.
      */
     private void sortByAscendingNumber() {
         int start = -1;
@@ -305,29 +312,26 @@ public class Deck {
                     }
                 }
             }
-
         }
-        // System.out.println(start + " " + end);
+
         for (int i = start; i < end; i++) {
             Card min = cards[i];
             int index = i;
             for (int j = i + 1; j < end; j++) {
-
                 if (((Number) cards[j]).getNumber() < ((Number) min).getNumber()) {
                     min = cards[j];
                     index = j;
                 }
             }
-
             cards[index] = cards[i];
             cards[i] = min;
-
         }
     }
 
     /**
      * Sorts the deck by alphabetical type order. This sort uses bubble sort with
-     * early termination
+     * early termination, and should be used first as it may disrupt the order of
+     * other stable sorts.
      */
     private void sortByType() {
         boolean quit = false;
@@ -335,24 +339,19 @@ public class Deck {
             quit = true;
             for (int i = 1; i < numCards - j; i++) {
                 if (String.valueOf(cards[i - 1].getClass()).compareTo(String.valueOf(cards[i].getClass())) > 0) {
-                    // System.out.println(
-                    // String.valueOf(cards[i -
-                    // 1].getClass()).compareTo(String.valueOf(cards[i].getClass())) + " "
-                    // + cards[i - 1] + " " + cards[i]);
                     quit = false;
                     Card temp = cards[i];
                     cards[i] = cards[i - 1];
                     cards[i - 1] = temp;
                 }
-
             }
         }
-
     }
 
     /**
-     * Sorts all cards by alphabetical colour order. This uses stable insertion
-     * sort, and does not break any prior arragnments of the deck.
+     * Sorts all cards by alphabetical colour order. This uses STABLE insertion
+     * sort, and does not break any prior arragnments of the deck (meaning type and
+     * ascending). This sort should be used last.
      */
     private void sortByColour() {
         for (int i = 1; i < numCards; i++) {
@@ -363,12 +362,7 @@ public class Deck {
                     cards[j] = temp;
                 }
             }
-
         }
-
-        // The issue in my initial insertion here was that I was not making space by
-        // shifting all the cards, I
-        // was straight up just swapping, without organizing any cards in between
     }
 
     /**
@@ -379,8 +373,8 @@ public class Deck {
     }
 
     /**
-     * Searches and returns the total number of cards of a specified colour within
-     * the deck using recursion. This method is a wrapper.
+     * Searches and returns the total number of cards of a specified colour found
+     * within the deck using recursion. This method is a wrapper.
      * 
      * @param colour
      * @return an integer. Return 0 if none match.

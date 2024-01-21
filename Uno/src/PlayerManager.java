@@ -3,7 +3,7 @@
 |  PlayerManager.java                                                         |
 |-----------------------------------------------------------------------------|
 |  Programmer:  Adrian Lock and Robin Yan                                     |
-|  Last Modified:   Jan 18, 2024                                              |
+|  Last Modified:   Jan 21, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
 |  This class is the class that manages the player objects. This class acts as|
@@ -93,8 +93,8 @@ public class PlayerManager {
     }
 
     /**
-     * This method sort the list and move the next player to the first index, if
-     * this is true, it will call its self one more time to skip the next player
+     * Sorts the player list to the next-in-line player. If a skip card was played,
+     * it will call its self one more time to skip to the next next player
      * 
      * @param skipped a boolean indicating if the next player is skipped
      */
@@ -111,13 +111,13 @@ public class PlayerManager {
     }
 
     /**
-     * *the method will just switch the second and fourth player, thus reverting the
-     * rotation. Again, current player is player[0], but instead of next being i.e.
-     * normally player[1] Bob, it will be Joe in replacement of Bob in position
-     * player[1], and Bob is moved to player[3], being the fourth player.
+     * Reverses the order of the list excluding player[0], who is still the current
+     * player. The method flips player[i] and player[SET_PLAYERS-i] where i = 1 and
+     * increases until SET_PLAYER/2.
      * 
      */
     public void reverseOrder() {
+        // If SET_PLAYERS ever needed to be a non final variable...
         int halfIndex = (SET_PLAYERS % 2 == 0 ? SET_PLAYERS / 2 : SET_PLAYERS / 2 + 1);
         for (int i = 1; i < halfIndex; i++) {
             Player temp = players[i];
@@ -129,7 +129,7 @@ public class PlayerManager {
     }
 
     /**
-     * Draws cards for the next player affected by such
+     * Draws cards for the next player affected by +2 and +4 cards
      * 
      * @param cardsForNext the amount of cards the next player must draw
      * @param drawDeck     the public draw Deck
@@ -142,8 +142,6 @@ public class PlayerManager {
     }
 
     /**
-     * This program returns the current player in the list
-     * 
      * @return a Player object representing the current player
      */
     public Player getCurrentPlayer() {
@@ -151,11 +149,12 @@ public class PlayerManager {
     }
 
     /**
-     * Index must not be larger than the number of players or less than 0.
-     * Out of bounds values will be changed to 0. This method should only be used to
-     * set up the game.
+     * Returns a player. The given index must not be larger than the number of
+     * players-1 or less than 0. Out of bound values will be changed to 0. This
+     * method should only be upon saving the game, loading the game, and accessing
+     * player decks in Tutorial.
      * 
-     * @param position the position of the player of interest
+     * @param position the position of the player of interest in the list
      * @return the player of the specified index
      */
     public Player getPlayer(int position) {
@@ -165,14 +164,14 @@ public class PlayerManager {
     }
 
     /**
-     * Searches the player using the specified name, this game uses binary search
-     * to search player using the name
+     * Searches the player of a specified name. This method uses binary search
+     * to search the default list alphabetically.
      * 
      * @param name
-     * @return
+     * @return a Player of the matching name. Return null if not found.
      */
     public Player searchPlayer(String name) {
-        int bottom = 0, top = SET_PLAYERS - 1, index = -1, middle;
+        int bottom = 0, top = SET_PLAYERS - 1, middle;
         boolean found = false;
         while (defaultList[bottom].getName().compareTo(defaultList[top].getName()) <= 0 && !found) {
             middle = (bottom + top) / 2;

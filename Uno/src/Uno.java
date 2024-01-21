@@ -3,7 +3,7 @@
 |  Uno.java                                                                   |
 |-----------------------------------------------------------------------------|
 |  Programmer:  Adrian Lock and Robin Yan                                     |
-|  Last Modified:   Jan 18, 2024                                              |
+|  Last Modified:   Jan 21, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
 |  This class acts like a game manager for any uno games being run (Uno       |
@@ -40,6 +40,7 @@ public class Uno {
     private static String gameRules = "GameRules:";
     private static Game currentGame;
     private static String currentSlot = null;
+    private static String version = "Beta 1.3";
 
     /**
      * Runs the main loop allowing user to create game, delete game and loading a
@@ -131,8 +132,7 @@ public class Uno {
 
     /**
      * Displays the interface to load a game that was saved in txt. Players are able
-     * to choose
-     * the game slot to be loaded.
+     * to choose the game slot to be loaded.
      */
     private static void loadGame() {
         boolean exit = false;
@@ -545,7 +545,7 @@ public class Uno {
     private static void programDescription() {
         System.out.println("\n" +
                 "Title: YUNO UNO\n" +
-                "Version: Beta 1.1\n" +
+                "Version: " + version + "\n" +
                 "\n" +
                 "Contributors:\n" +
                 "\n" +
