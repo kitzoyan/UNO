@@ -62,8 +62,8 @@ public class Uno {
             System.out.println("Slot #3 " + checkGame(SLOT3FILE) + "\n");
             System.out.println(
                     "\t1. Create a new Game\n" + "\t2. Continue a game\n" + "\t3. Delete a game\n"
-                            + "\t4. Program Details\n" + "\t5. Close Game");
-            input = verifyInput(5); // make sure the input is within 4
+                            + "\t4. Program Details\n" + "\t5. How to play\n" + "\t6. Close Game");
+            input = verifyInput(6); // make sure the input is within 4
             if (input == 1) { // create a game
                 if (emptySlot() != null) {
                     createGame(); // will create the game and run it
@@ -81,6 +81,8 @@ public class Uno {
             } else if (input == 4) {
                 programDescription();
             } else if (input == 5) {
+                printRules();
+            } else if (input == 6) {
                 exit = true;
             }
         }
@@ -195,7 +197,6 @@ public class Uno {
                 exit = true; // go back to the main menu
             } else {
                 System.out.println("The game slot you entered is empty");
-                wait(2000);
             }
 
         }
@@ -348,7 +349,7 @@ public class Uno {
 
             input = reader.readLine();
             for (int i = 0; i < Integer.parseInt(input); i++) {
-                gameRules = gameRules + "\n" + reader.readLine();
+                gameRules = gameRules + "\n\t" + (i + 1) + ". " + reader.readLine();
             }
             reader.readLine();
             input = reader.readLine();
@@ -575,5 +576,15 @@ public class Uno {
         } catch (InterruptedException e) {
             System.out.println("SYSTEM: (Game) Thread was interputed");
         }
+    }
+
+    /**
+     * Print out the basic game rules of uno
+     */
+    private static void printRules() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(gameRules);
+        System.out.print("Press enter to continue");
+        sc.nextLine();
     }
 }
