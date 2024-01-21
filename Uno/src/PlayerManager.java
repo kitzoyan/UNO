@@ -7,26 +7,25 @@
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
 |  This class is the class that manages the player objects. This class acts as|
-|  the rotation/order of players. The order of players can change depending on|
+|  the rotation/order of players, and the order can change depending on       |
 |  any effects executed from the current card from Game class.                |
 |=============================================================================*/
 import java.io.ObjectInputStream.GetField;
 
 public class PlayerManager {
     private final int SET_PLAYERS = 4;
-    private int nextDraw;
     private Player[] players = new Player[SET_PLAYERS];
     private Player[] defaultList = new Player[SET_PLAYERS];
 
     /**
-     * Class Constructor
-     * This Constructor is for creating a new game, when you create a new game. This
-     * method will run, using the default difficulty, empty deck
+     * Creates a new PlayerManger. This method is called when a new game is made.
+     * This method will create the Player objects for the game
      * 
-     * @param p1 a String represents the name of the human
-     * @param p2 a String represents the name of the cpu
-     * @param p3 a String represents the name of the cpu
-     * @param p4 a String represents the name of the cpu
+     * @param p1         a String represents the name of the human
+     * @param p2         a String represents the name of the cpu
+     * @param p3         a String represents the name of the cpu
+     * @param p4         a String represents the name of the cpu
+     * @param difficulty a int representing the difficulty level of CPU's
      */
     public PlayerManager(String p1, String p2, String p3, String p4, int difficulty) {
         players[0] = new Human(p1);
@@ -53,9 +52,8 @@ public class PlayerManager {
     }
 
     /**
-     * Class Constructor
-     * This constructor is for loading a game from the previous game file, using the
-     * saved difficulty level and deck
+     * Creates a PlayerManager which resumes a game from the loaded information of
+     * a save.
      * 
      * @param p1       a String represents the name of the human
      * @param d1       a Deck containing the card of human

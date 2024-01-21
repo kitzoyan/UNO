@@ -201,7 +201,7 @@ public class Game {
         players.sortNextPlayer(toSkip);
 
         // Delay the output so players can read
-        Uno.wait(2000);
+        Uno.wait(2500);
 
         System.out.println(
                 "============================================ "
@@ -349,6 +349,7 @@ public class Game {
                         c.getDeck().moveCard(drawPile, drawPile.drawRandom());
                         c.getDeck().moveCard(drawPile, drawPile.drawRandom());
                         c.callUno();
+                        Uno.wait(1000);
 
                     }
                 }
@@ -403,11 +404,11 @@ public class Game {
      */
     public boolean CpuPanic() {
         int minCards = players.getPlayer(1).getDeck().getNumCards();
-        for (int i = 2; i < players.getSetPlayers(); i++) {
-            if (players.getPlayer(i).getDeck().getNumCards() < minCards) {
-                minCards = players.getPlayer(i).getDeck().getNumCards();
-            }
-        }
+        // for (int i = 2; i < players.getSetPlayers(); i++) {
+        // if (players.getPlayer(i).getDeck().getNumCards() < minCards) {
+        // minCards = players.getPlayer(i).getDeck().getNumCards();
+        // }
+        // }
         return (minCards < 4);
     }
 

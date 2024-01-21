@@ -6,9 +6,8 @@
 |  Last Modified:   Jan 18, 2024                                              |
 |  Course:  ICS4U1                                                            |
 |-----------------------------------------------------------------------------|
-|  This class is an extension of Game. There are a set of additional features,|
-|  explicit explaining of each card’s function when they are played, being    |
-|  able to look at other people’s hand, being able to look through discard and|
+|  This class is an extension of Game. The user is able to learn how the game |
+|  works by being able to view other people’s hand, to look through discard & |
 |  draw piles. This game mode is designed for the new players who wish to     |
 |  learn how to play without the need of a real person to help.               |
 |=============================================================================*/
@@ -18,14 +17,15 @@ public class Tutorial extends Game {
     private Scanner sc = new Scanner(System.in);
 
     /**
-     * Class Constructor
-     * Uses to create a new tutorial game, turns on tutorial mode in Human player
+     * Creates a new tutorial game which turns on tutorial mode in Human player
      * 
      * @param gameName   a String representing the name of the game
      * @param playerName a String representing the name of the player
      * @param cpu1       a String representing the name of cpu 1
      * @param cpu2       a String representing the name of cpu 2
      * @param cpu3       a String representing the name of cpu 3
+     * @param fullDeck   the full public Deck from Uno
+     * @param difficulty the difficulty level of CPU's
      */
 
     public Tutorial(String gameName, String playerName, String cpu1, String cpu2, String cpu3, Deck fullDeck,
@@ -36,10 +36,12 @@ public class Tutorial extends Game {
     }
 
     /**
-     * Class Constructor
-     * Uses to create a new tutorial game, turns on tutorial mode in Human player
+     * Creates a new tutorial game based on the information found in the txt file
+     * provided. This constructor assumes the txt has been validated in Uno as a
+     * Tutorial type.
      *
      * @param fileName the specified file name that stores the game file
+     * @param fullDeck the full public Deck from Uno
      */
     public Tutorial(String fileName, Deck fullDeck) {
         super(fileName, fullDeck);
@@ -60,13 +62,11 @@ public class Tutorial extends Game {
     }
 
     /**
-     * Displays the GUI for user interface upon choosing to view all hidden decks.
+     * Displays the user interface upon choosing to view all hidden decks.
      * This method should only be called from Human with TUTORIAL toggled on.
      * This method gives options to view public decks and other player decks.
      */
     public void revealCards() {
-        // System.out.println("\t1. Reveal Cards in Draw Pile\n\t2. Reveal Cards in
-        // Discard Pile\n\t3. Reveal a Player's Deck\n\t4. Return");
         int input = 0;
         boolean exit = false;
         while (!exit) {
@@ -96,7 +96,7 @@ public class Tutorial extends Game {
     }
 
     /**
-     * Prints the specific GUI for choosing to reveal a specific player's deck.
+     * Prints the interface for choosing to reveal a specific player's deck.
      * You must know who you want to reveal by name.
      */
     private void revealPlayer() {
@@ -113,7 +113,7 @@ public class Tutorial extends Game {
                 } else {
                     System.out.println("No name was found. Re-enter a valid option: ");
                 }
-            } catch (NumberFormatException e) { // This time because string input there is no false answer
+            } catch (NumberFormatException e) { // If the input is not a number...
                 boolean found = false;
                 for (int i = 0; i < players.getSetPlayers(); i++) {
                     if (players.getPlayer(i).getName().equalsIgnoreCase(input)) {

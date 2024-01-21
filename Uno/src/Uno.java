@@ -12,7 +12,7 @@
 |  the slots are empty or if there is data stored in it. It will initiate any |
 |  game objects respectively. Then the class will print a menu, allowing the  |
 |  user to either create a new game, load a game or delete a game, read rules,|
-|  and customer service information. When you create a new game, the class    |
+|  and print customer service information. When making a new game, the class  |
 |  will prompt you for the game type you want to create (normal or tutorial). |
 |  You can also load a  game from the text file and resume from there.        |
 |  Note:                                                                      |
@@ -41,13 +41,9 @@ public class Uno {
     private static String gameRules = "GameRules:";
     private static Game currentGame;
 
-    // private static Game slot1;
-    // private static Game slot2;
-    // private static Game slot3;
-
     /**
-     * Runs the main loop, allowing user to create game, delete game and loading a
-     * game
+     * Runs the main loop allowing user to create game, delete game and loading a
+     * game. This will further call other methods containing their own loops.
      */
     public static void run() {
         int input;
@@ -88,17 +84,20 @@ public class Uno {
     }
 
     /**
-     * Create the game
+     * Creates a new game and displays the interface for it. Upon choosing to play a
+     * tutorial or normal game, the method will then call the game's own run loop.
+     * Users will be asked to provide a name for the game, their player name, and 3
+     * other CPU names.
      */
     private static void createGame() {
         int input, difficulty;
         boolean tutorial;
         String gameName, player, cpu1, cpu2, cpu3;
-
         System.out.println("=========================================== NEW GAME\n" + //
                 "Choose your game mode:\n" + //
                 "\t1. Normal\n" + //
                 "\t2. Tutorial");
+
         input = verifyInput(2); // make sure the input is within 2
         if (input == 1) {
             tutorial = false;
@@ -118,6 +117,7 @@ public class Uno {
         System.out.println("Enter difficulty(1-3): ");
         difficulty = verifyInput(3);
 
+        // Depending on what is chosen, make a new game
         if (tutorial) {
             currentGame = new Tutorial(gameName, player, cpu1, cpu2, cpu3, fullDeck, difficulty);
             currentGame.run();
@@ -128,7 +128,9 @@ public class Uno {
     }
 
     /**
-     * Loads a game, able to choose the game slot want to load,
+     * Displays the interface to load a game that was saved in txt. Players are able
+     * to choose
+     * the game slot to be loaded.
      */
     private static void loadGame() {
         boolean exit = false;
@@ -141,6 +143,7 @@ public class Uno {
                     "\t2. Slot #2\n" + //
                     "\t3. Slot #3\n" + //
                     "\t4. Go Back");
+
             input = verifyInput(4);
             if (input == 1 && !isEmpty(1)) {
                 createGameObject(SLOT1FILE);
@@ -164,20 +167,21 @@ public class Uno {
     }
 
     /**
-     * Deletes Game file
+     * Deletes saved Game files. You cannot make any new games if all 3 slots are
+     * filled.
      */
     private static void deleteGame() {
         boolean exit = false;
         int input;
 
         while (!exit) {
-
             System.out.println("============================================ Delete GAME\n" + //
                     "Choose a game slot to delete:\n" + //
                     "\t1. Slot #1\n" + //
                     "\t2. Slot #2\n" + //
                     "\t3. Slot #3\n" + //
                     "\t4. Go Back");
+
             input = verifyInput(4);
             if (input == 1 && !isEmpty(1)) {
                 deleteGameFile(SLOT1FILE);
@@ -200,7 +204,8 @@ public class Uno {
 
     /**
      * Saves game by writing the current date, game name, current color, current
-     * card, discard pile's deck and all players deck
+     * card, discard pile's deck and all players deck onto txt. This method is
+     * called by the Human play() interface.
      */
     public static void saveGame() {
         // generate the current date
@@ -229,15 +234,10 @@ public class Uno {
             writer.write(currentColor + "\n");
 
             writer.write("\ndiscard\n");
-            // writer.write(discardPile.getNumCards() + "\n");
             for (int i = 0; i < discardPile.getNumCards(); i++) {
                 writer.write(discardPile.getCard(i).getColour() + "\n" + discardPile.getCard(i).getType() + "\n");
             }
-
             writer.write("\n");
-            // writer.write("draw\n");
-            // writer.write(drawPile.getNumCards() + "\n");
-            // writer.write(drawPile.toString() + "\n");
 
             Player temp;
             Deck deck;
@@ -271,16 +271,17 @@ public class Uno {
     /**
      * Returns current game object
      * 
-     * @return the Game object
+     * @return the Game object being played currently
      */
     public static Game getCurrentGame() {
         return currentGame;
     }
 
     /**
-     * verifies the input in the given range of int
+     * Verifies the input in the given range of int. This is to reduce repetitive
+     * programming of the same logic.
      * 
-     * @param x specified game slot
+     * @param x the maximum option to pick from (0 < choice <= x)
      * @return the verfied input
      */
     public static int verifyInput(int x) {
@@ -304,7 +305,7 @@ public class Uno {
     }
 
     /**
-     * Deletes game by rewriting the file. Delete
+     * Deletes game by overwriting the file with nothing.
      * 
      * @param fileName
      */
@@ -318,9 +319,7 @@ public class Uno {
     }
 
     /**
-     * Loads the gamerule and definitions of each card from the files
-     * Saves to the game rule string, update it to the static variable in each cards
-     * method
+     * Loads the game rules and sets definitions of each card from the files.
      */
     private static void loadRule() {
         String reverse = "R";
@@ -395,8 +394,8 @@ public class Uno {
     }
 
     /**
-     * This will determine if the gameslot is a tutorial or not and set the current
-     * game to a new specified game object
+     * Loads a tutorial or normal Game based on what is saved in the txt file.
+     * This is called by the loadGame() method
      * 
      * @param fileName a String representing the name of the slot file
      */
@@ -409,19 +408,20 @@ public class Uno {
     }
 
     /**
-     * Verifies String input, if it exceeds the word limit. It will prompt the user
-     * agin
+     * Verifies a String input. If it exceeds the word limit, it will prompt the
+     * user
+     * to re-enter.
      * 
      * @return the String that is the valid input
      */
     public static String verifyInput() {
-        final int wordLimit = 15;
+        final int WORDLIMIT = 15;
         String input;
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.print("[input]: ");
             input = sc.nextLine();
-            if (input.length() <= 15) {
+            if (input.length() <= WORDLIMIT) {
                 return input;
             } else {
                 System.out.println("Enter something less than 15 characters!");
@@ -431,8 +431,8 @@ public class Uno {
     }
 
     /**
-     * Return the game status, if it is not empty it will return in
-     * | Date | Game name format
+     * Reads the status of a game in a txt. If it is not empty it will return in
+     * | Date | Game name format, otherwise | Empty
      * 
      * @param file a String that is the name of the file
      * @return the status of the game, example like | 2023/12/25 | Chrimtmas game
@@ -459,15 +459,13 @@ public class Uno {
     }
 
     /**
-     * Checks if the first empty game slot, this is use when creating game and
-     * saving game. Return null if there are no available game slots
+     * Finds the first empty game slot to which a game can be saved to.
+     * Return null if there are no available game slots.
      * 
      * @return return the fileName of the slot which is empty
      */
     private static String emptySlot() {
         String empty = "| empty";
-        // System.out.printf("%s, %s, %s", checkGame(SLOT1FILE), checkGame(SLOT2FILE),
-        // checkGame(SLOT3FILE));
         if (empty.equals(checkGame(SLOT1FILE))) {
             return SLOT1FILE;
         } else if (empty.equals(checkGame(SLOT2FILE))) {
@@ -479,7 +477,8 @@ public class Uno {
     }
 
     /**
-     * Checks if the game file is in tutorial mode, uses in loadGame method, will
+     * Checks if the game file is a tutorial. This method is used in loadGame
+     * method, will
      * first check if the file is empty then will read until the tutorial line
      * 
      * @param x a String representing the game slot the user want to check
@@ -527,7 +526,7 @@ public class Uno {
     }
 
     /**
-     * Print out the version details, contributors and statistics
+     * Prints out the version details, contributors and statistics
      */
     private static void programDescription() {
         System.out.println("\n" +
@@ -551,10 +550,10 @@ public class Uno {
         wait(2000);
     }
 
-    /*
-     * Stall the program
+    /**
+     * Stalls the program so users can have time to read interface
      * 
-     * @param msec
+     * @param msec time in milisecond
      */
     public static void wait(int msec) {
         try {

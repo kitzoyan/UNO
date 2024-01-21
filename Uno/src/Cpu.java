@@ -142,7 +142,16 @@ public class Cpu extends Player {
         }
         // Wild cards are last resort except during panic for CPU > 2
         if (lastWild != -1) {
-            return deck.getCard(lastWild); // Play the last wild card(usually +4)
+            if (difficulty > 2) {
+                // If they are going to play a wild card, play +4 only when panick
+                if (Uno.getCurrentGame().CpuPanic()) {
+                    return deck.getCard(lastWild);
+                } else {
+                    return deck.getCard(0);
+                }
+            } else {
+                return deck.getCard(0); // Play the first wild card(usually CC)
+            }
         }
         // Just find any card that works at this point if no wild cards
         for (int i = 0; i < deck.getNumCards(); i++) {
@@ -178,7 +187,7 @@ public class Cpu extends Player {
                 this.calledUno = true;
             }
         } else {
-            System.out.println("SYSTEM: (Cpu) The game should now end!");
+            // System.out.println("SYSTEM: (Cpu) The game should now end!");
         }
     }
 
