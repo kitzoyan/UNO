@@ -24,7 +24,6 @@
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import Cards.*;
@@ -40,6 +39,7 @@ public class Uno {
     private static Deck fullDeck;
     private static String gameRules = "GameRules:";
     private static Game currentGame;
+    private static String currentSlot = null;
 
     // private static Game slot1;
     // private static Game slot2;
@@ -144,14 +144,17 @@ public class Uno {
             input = verifyInput(4);
             if (input == 1 && !isEmpty(1)) {
                 createGameObject(SLOT1FILE);
+                currentSlot = SLOT1FILE;
                 currentGame.run();
                 exit = true;
             } else if (input == 2 && !isEmpty(2)) {
                 createGameObject(SLOT2FILE);
+                currentSlot = SLOT2FILE;
                 currentGame.run();
                 exit = true;
             } else if (input == 3 && !isEmpty(3)) {
                 createGameObject(SLOT2FILE);
+                currentSlot = SLOT3FILE;
                 currentGame.run();
                 exit = true;
             } else if (input == 4) {
@@ -205,6 +208,8 @@ public class Uno {
     public static void saveGame() {
         // generate the current date
         Date currentDate = new Date();
+        BufferedWriter writer;
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String currentDateTime = dateFormat.format(currentDate);
 
@@ -215,7 +220,11 @@ public class Uno {
         Deck discardPile = currentGame.getDiscardPile();
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(emptySlot()));
+            if (currentSlot != null) { // if the game is resumed, it will save to the old slot
+                writer = new BufferedWriter(new FileWriter(currentSlot));
+            } else {
+                writer = new BufferedWriter(new FileWriter(emptySlot()));
+            }
             writer.write(currentDateTime + "\n");
             writer.write(currentGame.getName() + "\n\n");
             if (currentGame instanceof Tutorial) {
@@ -254,6 +263,9 @@ public class Uno {
                     writer.write("\ncpu\n");
                     difficulty = ((Cpu) temp).getDifficulty();
                     writer.write("" + difficulty);
+                    writer.write("\n" + ((Cpu) temp).getNeedUno());
+                    writer.write("\n" + ((Cpu) temp).getCalledUno());
+
                 }
                 writer.write("\n" + i + "\n");
                 for (int j = 0; j < deck.getNumCards(); j++) {
@@ -401,6 +413,7 @@ public class Uno {
      * @param fileName a String representing the name of the slot file
      */
     private static void createGameObject(String fileName) {
+        currentSlot = null;
         if (isTutorial(fileName)) {
             currentGame = new Tutorial(fileName, fullDeck);
         } else {
