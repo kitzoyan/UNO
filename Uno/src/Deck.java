@@ -287,8 +287,9 @@ public class Deck {
             return;
         }
         sortNull();
-        sortByType();
-        sortByAscendingNumber();
+        // sortByType();
+        // sortByAscendingNumber();
+        sortByTypeAscending();
         sortByColour();
     }
 
@@ -296,6 +297,9 @@ public class Deck {
      * Locates the beginning and end indexes of the all Number Cards within the list
      * and sorts all numbers in ascending order, disregarding colour. This sort uses
      * selectio sort, and assumes the list has already been type-sorted.
+     * 
+     * @deprecated
+     * @see #sortByTypeAscending()
      */
     private void sortByAscendingNumber() {
         int start = -1;
@@ -332,6 +336,9 @@ public class Deck {
      * Sorts the deck by alphabetical type order. This sort uses bubble sort with
      * early termination, and should be used first as it may disrupt the order of
      * other stable sorts.
+     * 
+     * @deprecated
+     * @see #sortByTypeAscending()
      */
     private void sortByType() {
         boolean quit = false;
@@ -343,6 +350,33 @@ public class Deck {
                     Card temp = cards[i];
                     cards[i] = cards[i - 1];
                     cards[i - 1] = temp;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sorts the deck by alphabetical type order, and if it's a Number type, sort
+     * that in ascending order. This sort uses bubble sort. If the name of the class
+     * type is alphabetically after the next, swap it, OR, if the number of the card
+     * is larger than the next, swap it too.
+     */
+    private void sortByTypeAscending() {
+        boolean quit = false;
+        for (int j = 0; j < numCards && !quit; j++) {
+            quit = true;
+            for (int i = 1; i < numCards - j; i++) {
+                try {
+                    if ((String.valueOf(cards[i - 1].getClass()).compareTo(String.valueOf(cards[i].getClass())) > 0)
+                            || ((cards[i - 1] instanceof Number && cards[i] instanceof Number)
+                                    && ((Number) cards[i - 1]).getNumber() > ((Number) cards[i]).getNumber())) {
+                        quit = false;
+                        Card temp = cards[i];
+                        cards[i] = cards[i - 1];
+                        cards[i - 1] = temp;
+                    }
+                } catch (ClassCastException e) {
+                    System.out.println("SYSTEM: (Deck) System should not reach here");
                 }
             }
         }

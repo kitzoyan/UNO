@@ -26,7 +26,7 @@ public class Game {
     protected Card currentCard = null;
     protected Card previousCard = null; // Used only to check if people drew instead of played
     protected String currentColour;
-    protected final static int INIT_CARDS = 7;
+    protected final static int INIT_CARDS = 2;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
@@ -354,6 +354,7 @@ public class Game {
                         c.getDeck().moveCard(drawPile, drawPile.drawRandom());
                         c.getDeck().moveCard(drawPile, drawPile.drawRandom());
                         c.callUno();
+                        // System.out.println(c.getCalledUno() + " " + c.getNeedUno());
                         Uno.wait(1000);
 
                     }
