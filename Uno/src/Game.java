@@ -257,8 +257,8 @@ public class Game {
     private void drawFirstCard() {
         Card temporary = null;
         do {
-            // temporary = drawPile.drawRandom();
-            temporary = drawPile.getCard(drawPile.searchSpecificCard("black", "C"));
+            temporary = drawPile.drawRandom();
+            // temporary = drawPile.getCard(drawPile.searchSpecificCard("black", "C"));
         } while (temporary instanceof PlusFour);
 
         // Since the real 1st player is currently 2nd in list before the game begins,
