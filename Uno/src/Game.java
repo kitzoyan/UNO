@@ -26,7 +26,7 @@ public class Game {
     protected Card currentCard = null;
     protected Card previousCard = null; // Used only to check if people drew instead of played
     protected String currentColour;
-    protected final static int INIT_CARDS = 2;
+    protected final static int INIT_CARDS = 7;
     protected PlayerManager players;
     protected Deck drawPile;
     protected Deck discardPile;
@@ -257,17 +257,25 @@ public class Game {
     private void drawFirstCard() {
         Card temporary = null;
         do {
-            temporary = drawPile.drawRandom();
+            // temporary = drawPile.drawRandom();
+            temporary = drawPile.getCard(drawPile.searchSpecificCard("black", "C"));
         } while (temporary instanceof PlusFour);
 
         // Since the real 1st player is currently 2nd in list before the game begins,
         // If the first Card is reverse, then we must sort now so when reverse is
         // applied, the nobody is skipped (should be player[4] instead of player[3]
         // next)
-        if (temporary instanceof Reverse) {
+        if (temporary instanceof Reverse || temporary.getColour().equals("black")) {
             players.sortNextPlayer(false);
         }
         setCurrentCard(temporary, players.getCurrentPlayer() instanceof Cpu, drawPile);
+
+        // If it was colour change, the first player's turn was not skipped, loop back
+        // to it
+        if (temporary instanceof ColourChange) {
+            players.sortNextPlayer(true);
+            players.sortNextPlayer(false);
+        }
     }
 
     /**

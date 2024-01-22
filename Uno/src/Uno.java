@@ -40,7 +40,7 @@ public class Uno {
     private static String gameRules = "GameRules:";
     private static Game currentGame;
     private static String currentSlot = null;
-    private static String version = "Beta 1.4";
+    private static String version = "Beta 1.5";
 
     /**
      * Runs the main loop allowing user to create game, delete game and loading a
